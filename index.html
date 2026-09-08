@@ -85,7 +85,6 @@
       100% { transform: translateX(-50%) scale(1); }
     }
 
-    /* Container */
     .app-container {
       max-width: 96%;
       width: 100%;
@@ -95,7 +94,6 @@
       gap: 20px;
     }
 
-    /* Cards & Glassmorphism */
     .card {
       background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(4px);
@@ -170,7 +168,6 @@
       transform: scale(0.97);
     }
 
-    /* Eye-Catching Passport Studio Launcher Tile */
     .passport-banner-card {
       position: relative;
       background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 35%, #7c3aed 70%, #ec4899 100%);
@@ -283,7 +280,6 @@
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     }
 
-    /* Home Navigation Button */
     .home-nav-btn {
       background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
       color: #ffffff !important;
@@ -306,7 +302,6 @@
       box-shadow: 0 6px 18px rgba(0,0,0,0.25) !important;
     }
 
-    /* Controls */
     .controls {
       display: flex;
       flex-wrap: wrap;
@@ -323,10 +318,6 @@
       border: 1px solid #dce2ec;
       cursor: pointer;
       transition: 0.15s;
-    }
-
-    .controls input[type="file"]:hover {
-      border-color: #94a3b8;
     }
 
     button {
@@ -353,8 +344,6 @@
       box-shadow: 0 6px 14px rgba(0, 20, 40, 0.12);
     }
 
-    button:active:not(:disabled) { transform: translateY(0); }
-
     button:disabled {
       opacity: 0.45;
       transform: none !important;
@@ -380,7 +369,6 @@
       user-select: none;
     }
 
-    /* Zoom Controls */
     .zoom-controls-group {
       display: inline-flex;
       align-items: center;
@@ -423,7 +411,6 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Stage grid for ID card */
     .stage-grid {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 330px;
@@ -497,13 +484,7 @@
       padding: 0 4px;
     }
 
-    /* Config panel */
-    .config-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
+    .config-panel { display: flex; flex-direction: column; gap: 14px; }
     .sub-box {
       background: white;
       border-radius: 16px;
@@ -553,7 +534,6 @@
       border-radius: 40px;
       background: #1e3a5f;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
 
     .size-inputs {
@@ -576,7 +556,6 @@
       border-radius: 10px;
       font-size: 13px;
       background: white;
-      transition: 0.15s;
     }
 
     .photo-highlight { border-left: 4px solid #e8476a; }
@@ -596,13 +575,13 @@
       background: white;
       padding: 28px 32px;
       border-radius: 32px;
-      width: 380px;
+      width: 440px;
+      max-width: 92vw;
       box-shadow: 0 30px 60px rgba(0,0,0,0.2);
     }
 
-    .modal-box h3 { font-weight: 600; font-size: 18px; margin-bottom: 4px; }
+    .modal-box h3 { font-weight: 700; font-size: 19px; margin-bottom: 6px; }
 
-    /* A4 Print Sheet for ID studio */
     .a4-preview-wrapper {
       overflow-x: auto;
       padding: 30px 10px;
@@ -627,20 +606,13 @@
       transition: gap 0.15s ease;
     }
 
-    @keyframes cardEntrance {
-      0% { opacity: 0; transform: scale(0.94) translateY(12px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
     .print-card-wrapper {
       position: relative;
       display: inline-block;
       border-radius: 6px;
       overflow: hidden;
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
       background: white;
-      animation: cardEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     .print-card-wrapper:hover {
@@ -662,7 +634,6 @@
 
     .mini-btn {
       background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(4px);
       color: white;
       border: none;
       border-radius: 30px;
@@ -670,10 +641,8 @@
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
-      transition: 0.1s;
     }
     .mini-btn.del { background: #be123c; }
-    .mini-btn:hover { transform: scale(1.05); }
 
     #restoreBanner {
       font-size: 12px;
@@ -687,7 +656,7 @@
       gap: 6px;
     }
 
-    /* --- Passport Studio Scoped Styles --- */
+    /* Passport Studio Scoped */
     .studio-card {
       background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(4px);
@@ -728,7 +697,6 @@
       padding: 8px 12px;
       border: 1px solid #dce2ec;
       border-radius: 10px;
-      box-sizing: border-box;
       font-size: 13px;
     }
 
@@ -758,7 +726,6 @@
     .btn-action:hover:not(:disabled) {
       background: linear-gradient(135deg, #6d28d9, #7e22ce);
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
     }
 
     .cards-row { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 25px; }
@@ -771,7 +738,6 @@
       flex-direction: column;
       position: relative;
       box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-      overflow: visible;
     }
     .add-person-card {
       width: 240px;
@@ -788,6 +754,7 @@
       transition: all 0.2s;
       font-weight: 600;
       gap: 4px;
+      user-select: none;
     }
     .add-person-card:hover {
       border-color: #7c3aed;
@@ -837,13 +804,11 @@
       width: 24px;
       height: 24px;
       font-size: 14px;
-      line-height: 1;
       cursor: pointer;
       z-index: 10;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
 
     .passport-a4-wrapper {
@@ -890,38 +855,128 @@
 
     .hidden-file-input { display: none; }
 
-    /* Print styling separating ID mode from Passport mode */
-    @page { size: A4 portrait; margin: 0; }
+    /* ========================================================================= */
+    /*                         CRITICAL PRINT STYLESHEET                         */
+    /* ========================================================================= */
+    @page { 
+      size: A4 portrait; 
+      margin: 0mm; 
+    }
 
     @media print {
-      body { background: white; padding: 0; margin: 0; }
-      .no-print { display: none !important; }
-
-      body.mode-id #passportSection { display: none !important; }
-      body.mode-id .a4-preview-wrapper { padding: 0; background: transparent; border-radius: 0; }
-      body.mode-id .a4-sheet { 
-        box-shadow: none; 
-        margin: 0; 
-        padding: 12mm 15mm; 
-        page-break-after: always; 
-        gap: var(--sheet-row-gap, 6mm) var(--sheet-col-gap, 5mm) !important; 
+      html, body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 210mm !important;
+        height: auto !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
-      body.mode-id .print-card-wrapper { resize: none !important; box-shadow: none; transform: none !important; animation: none !important; }
-      body.mode-id .card-actions { display: none !important; }
 
-      body.mode-passport #smartIdSection { display: none !important; }
-      body.mode-passport .studio-card { padding: 0 !important; background: transparent !important; border: none !important; box-shadow: none !important; }
-      body.mode-passport .passport-a4-wrapper { padding: 0 !important; background: transparent !important; border: none !important; box-shadow: none !important; }
+      .no-print { 
+        display: none !important; 
+      }
+
+      .app-container {
+        display: block !important;
+        width: 210mm !important;
+        max-width: 210mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+      }
+
+      body.mode-id #passportSection { 
+        display: none !important; 
+      }
+      body.mode-id #smartIdSection { 
+        display: block !important;
+        width: 210mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      body.mode-id .a4-preview-wrapper { 
+        display: block !important;
+        padding: 0 !important; 
+        margin: 0 !important;
+        background: transparent !important; 
+        border-radius: 0 !important; 
+        box-shadow: none !important;
+        overflow: visible !important;
+        width: 210mm !important;
+      }
+      body.mode-id .a4-sheet { 
+        display: block !important;
+        box-shadow: none !important; 
+        margin: 0 !important; 
+        padding: 12mm 15mm !important; 
+        width: 210mm !important;
+        min-height: 297mm !important;
+        height: auto !important;
+        background: white !important;
+        box-sizing: border-box !important;
+        page-break-after: auto !important;
+        font-size: 0 !important;
+      }
+      body.mode-id .print-card-wrapper { 
+        display: inline-block !important; 
+        vertical-align: top !important;
+        box-sizing: border-box !important;
+        resize: none !important; 
+        box-shadow: none !important; 
+        transform: none !important; 
+        animation: none !important; 
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        margin-right: var(--sheet-col-gap, 5mm) !important;
+        margin-bottom: var(--sheet-row-gap, 6mm) !important;
+      }
+      body.mode-id .print-card-wrapper img {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+      body.mode-id .card-actions { 
+        display: none !important; 
+      }
+
+      body.mode-passport #smartIdSection { 
+        display: none !important; 
+      }
+      body.mode-passport #passportSection {
+        display: block !important;
+        width: 210mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      body.mode-passport .studio-card { 
+        padding: 0 !important; 
+        background: transparent !important; 
+        border: none !important; 
+        box-shadow: none !important; 
+      }
+      body.mode-passport .passport-a4-wrapper { 
+        display: block !important;
+        padding: 0 !important; 
+        background: transparent !important; 
+        border: none !important; 
+        box-shadow: none !important; 
+        overflow: visible !important;
+      }
       body.mode-passport .passport-a4-sheet {
         box-shadow: none !important;
         margin: 0 !important;
         padding: 5mm !important;
         width: 210mm !important;
-        height: 297mm !important;
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        page-break-after: always;
+        min-height: 297mm !important;
+        height: auto !important;
+        box-sizing: border-box !important;
+        page-break-after: auto !important;
+      }
+      body.mode-passport .passport-item {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
       }
     }
 
@@ -934,7 +989,6 @@
 </head>
 <body class="mode-id">
 
-<!-- Floating Top-Center Step Guidance Banner -->
 <div class="top-guide-bar no-print" id="topGuideBar">
   <span class="guide-tag" id="guideTag">STEP 1</span>
   <span class="guide-text" id="guideText">📂 Click <b>"Choose File"</b> below to load your ID card PDF or Image (JPG/PNG).</span>
@@ -942,9 +996,7 @@
 
 <div class="app-container">
 
-  <!-- ================================================================= -->
-  <!--                      SMART ID STUDIO SECTION                      -->
-  <!-- ================================================================= -->
+  <!-- SMART ID STUDIO -->
   <div id="smartIdSection">
     <div class="card no-print">
       <div class="top-bar">
@@ -958,7 +1010,6 @@
         </div>
       </div>
 
-      <!-- BIG EYE-CATCHY PASSPORT STUDIO LAUNCHER TILE -->
       <div class="passport-banner-card" onclick="switchStudioMode('passport')">
         <span class="passport-badge-tag">⭐ NEW 300 DPI TOOL</span>
         <div class="passport-banner-left">
@@ -979,7 +1030,6 @@
         <button id="rotateBtn" class="secondary" disabled title="Rotate 90°">↻ Rotate</button>
         <button id="pageToggleBtn" class="secondary" style="display:none;">📄 Page 1</button>
 
-        <!-- Zoom Controls Group -->
         <div class="zoom-controls-group" id="zoomControlsGroup" style="display: none;">
           <button id="zoomOutBtn" class="secondary zoom-btn" title="Zoom Out (Ctrl + Scroll Down)">🔍 -</button>
           <span id="zoomVal" class="badge zoom-badge">100%</span>
@@ -991,7 +1041,6 @@
         <span id="stepLabel" class="badge">Upload PDF or Image</span>
         <button id="nextStepBtn" disabled>Capture Front</button>
         
-        <!-- Add Card with Copies Counter -->
         <div id="addCardWrapper" style="display:none; align-items:center; gap:8px;">
           <span style="font-size:12px; font-weight:600; color:#334155; margin-left:4px;">Copies:</span>
           <input type="number" id="cardCopies" min="1" max="10" value="1" title="Number of copies to add to sheet" style="width:52px; padding:6px 8px; border-radius:30px; border:1px solid #cbd5e1; font-weight:700; text-align:center; font-size:13px; background:#fff;">
@@ -1004,7 +1053,7 @@
 
       <div class="stage-grid" id="stageWrapper" style="display: none; margin-top: 8px;">
         <div>
-          <div class="crop-area" id="canvasContainer" tabindex="0" title="Drag to crop. Hold Spacebar or Middle-click to pan. Ctrl+Wheel to zoom.">
+          <div class="crop-area" id="canvasContainer" tabindex="0">
             <div id="canvasViewport">
               <canvas id="pdfCanvas"></canvas>
               <canvas id="livePhotoCanvas"></canvas>
@@ -1075,7 +1124,7 @@
       </div>
     </div>
 
-    <!-- A4 Sheet Print Queue Bar with Card Gap Arrangement Option -->
+    <!-- A4 Sheet Print Queue Bar -->
     <div class="card no-print">
       <div class="controls" style="justify-content: space-between; margin-top:0;">
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
@@ -1086,19 +1135,18 @@
           <span id="restoreBanner">💾 Restored cards from your previous session</span>
         </div>
 
-        <!-- NEW: Option to arrange gap between cards -->
         <div class="gap-control-box" style="display:flex; align-items:center; gap:10px; background:#f1f5f9; padding:6px 14px; border-radius:30px; border:1px solid #dce2ec;">
           <span style="font-size:12px; font-weight:700; color:#1e3a5f; display:flex; align-items:center; gap:4px;">
             ↔️ Card Spacing:
           </span>
           <div style="display:flex; align-items:center; gap:4px;">
             <label for="cardRowGap" style="font-size:11px; font-weight:600; color:#64748b;">Row:</label>
-            <input type="number" id="cardRowGap" min="0" max="40" step="1" value="6" title="Vertical spacing between cards (mm)" style="width:48px; padding:4px 6px; border-radius:8px; border:1px solid #cbd5e1; font-weight:700; text-align:center; font-size:12px; background:#fff;">
+            <input type="number" id="cardRowGap" min="0" max="40" step="1" value="6" style="width:48px; padding:4px 6px; border-radius:8px; border:1px solid #cbd5e1; font-weight:700; text-align:center; font-size:12px; background:#fff;">
             <small style="font-size:11px; color:#64748b;">mm</small>
           </div>
           <div style="display:flex; align-items:center; gap:4px;">
             <label for="cardColGap" style="font-size:11px; font-weight:600; color:#64748b;">Col:</label>
-            <input type="number" id="cardColGap" min="0" max="40" step="1" value="5" title="Horizontal spacing between cards (mm)" style="width:48px; padding:4px 6px; border-radius:8px; border:1px solid #cbd5e1; font-weight:700; text-align:center; font-size:12px; background:#fff;">
+            <input type="number" id="cardColGap" min="0" max="40" step="1" value="5" style="width:48px; padding:4px 6px; border-radius:8px; border:1px solid #cbd5e1; font-weight:700; text-align:center; font-size:12px; background:#fff;">
             <small style="font-size:11px; color:#64748b;">mm</small>
           </div>
         </div>
@@ -1115,14 +1163,12 @@
     </div>
   </div>
 
-  <!-- ================================================================= -->
-  <!--                   PASSPORT PHOTO STUDIO SECTION                   -->
-  <!-- ================================================================= -->
+  <!-- PASSPORT PHOTO STUDIO -->
   <div id="passportSection" style="display:none;">
     <div class="card no-print" style="margin-bottom: 20px;">
       <div class="top-bar">
         <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-          <button class="home-nav-btn" onclick="switchStudioMode('id')" title="Return to ID Card Studio">
+          <button class="home-nav-btn" onclick="switchStudioMode('id')">
             🏠 Return to ID Studio
           </button>
           <div>
@@ -1139,7 +1185,6 @@
 
     <div class="studio-card">
       <div class="studio-container">
-        <!-- Sidebar Controls -->
         <div class="controls-panel no-print">
           <div class="form-group">
             <label>1. Photo Sizing Specs (cm)</label>
@@ -1156,7 +1201,6 @@
             </div>
           </div>
           
-          <!-- NEW: Border Default 3px & Customizable Controls -->
           <div class="form-group">
             <label>3. Cutting Border (Default: 3px)</label>
             <div class="checkbox-group" style="margin-bottom:8px;">
@@ -1166,7 +1210,7 @@
             <div class="dimension-inputs" id="passBorderControls" style="margin-top:6px;">
               <div>
                 <small>Width (px)</small>
-                <input type="number" id="passBorderWidth" value="3" min="0" max="15" step="1" title="Border Width in pixels (Default: 3px)">
+                <input type="number" id="passBorderWidth" value="3" min="0" max="15" step="1">
               </div>
               <div>
                 <small>Border Color</small>
@@ -1176,25 +1220,24 @@
           </div>
 
           <button class="btn-action" id="passportPrintBtn" onclick="handlePrintPassportSheet()">
-            🖨️ Print Ready A4 Sheet Matrix (1 pt)
+            🖨️ Print Ready A4 Sheet Matrix
           </button>
           <button class="secondary" onclick="clearAllPassportPhotos()" style="width:100%; margin-top: 10px; justify-content:center; border-radius:30px; font-size:12px;">
             ✕ Clear All Photos
           </button>
         </div>
 
-        <!-- Main Interactive Workspace -->
         <div class="preview-workspace">
           <div class="cards-row no-print" id="passportCardsContainer">
-            <div class="add-person-card" onclick="document.getElementById('passportFileLoader').click()">
+            <!-- ADD PHOTO BUTTON TILE -->
+            <div class="add-person-card" id="addPhotoTile" onclick="handleAddPhotoClick()">
               <div style="font-size:36px; line-height:1; margin-bottom:6px;">+</div>
-              <div>Add Profile Face</div>
-              <small style="font-size:11px; opacity:0.8;">(JPG, PNG, WEBP)</small>
+              <div>Add Photo</div>
+              <small style="font-size:11px; opacity:0.8;">(1 pt per photo added)</small>
             </div>
           </div>
           <input type="file" id="passportFileLoader" class="hidden-file-input" accept="image/*" multiple>
 
-          <!-- Printable Sheet -->
           <div class="passport-a4-wrapper" id="passportA4Wrapper">
             <div class="passport-a4-sheet" id="passportA4Sheet"></div>
           </div>
@@ -1205,14 +1248,33 @@
 
 </div>
 
-<!-- License modal (Shared across both studios) -->
+<!-- License & Recharge Modal with 1-Click WhatsApp Purchase -->
 <div class="modal-overlay" id="rechargeModal">
   <div class="modal-box">
-    <h3>🔐 License &amp; points</h3>
-    <p style="font-size:13px;color:#475569;margin:8px 0 14px;">Enter your license key to sync balance.</p>
+    <h3>🔐 License &amp; Points</h3>
+    
+    <!-- 1-Click WhatsApp Purchase Box -->
+    <div id="trialMessageBanner" style="display:none; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:18px; padding:16px; margin:14px 0;">
+      <p style="font-size:13px; color:#166534; line-height:1.5; margin-bottom:12px;">
+        Id खरीदने के लिये नीचे दिए गए बटन पर क्लिक करके अपना नाम, मोबाईल नंबर, शॉप का नाम और पता WhatsApp करें।
+        <br><b style="color:#dc2626;">(कृपया कॉल न करें, यह सिर्फ WhatsApp नंबर है)</b>
+      </p>
+      <a 
+        id="whatsappBuyBtn"
+        href="https://wa.me/919767785353?text=Namaste%2C%20mujhe%20Smart%20ID%20Studio%20Pro%20ki%20License%20ID%20kharidni%20hai.%0A%0A-%20Naam%3A%20%0A-%20Mobile%3A%20%0A-%20Shop%20Name%3A%20%0A-%20Address%3A%20" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        style="display:flex; align-items:center; justify-content:center; gap:8px; background:#25d366; color:white; font-weight:700; font-size:14px; padding:11px 18px; border-radius:30px; text-decoration:none; box-shadow:0 4px 12px rgba(37,211,102,0.25);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.187-2.59-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.073-2.008-.47-1.674-.693-2.73-2.414-2.813-2.525-.084-.112-.676-.901-.676-1.717 0-.816.425-1.218.577-1.373.151-.155.33-.194.44-.194.111 0 .221.002.318.006.103.004.24-.039.375.285.143.344.49 1.196.533 1.284.043.088.072.191.014.306-.058.116-.087.188-.173.289l-.26.307c-.087.094-.179.197-.077.372.102.176.454.75 0.973 1.212.668.595 1.232.78 1.406.868.174.088.276.074.38-.044.103-.118.441-.515.558-.691.118-.177.235-.147.397-.088.162.059 1.029.485 1.206.574.177.088.295.132.339.206.044.074.044.43-.1 0.835z"/>
+        </svg>
+        Chat on WhatsApp
+      </a>
+    </div>
+
+    <p style="font-size:13px;color:#475569;margin:8px 0 14px;">Enter license key to activate full access:</p>
     <input type="text" id="rechargeKey" placeholder="e.g. SHOP-1001" style="width:100%;padding:12px;border-radius:40px;border:1px solid #dce2ec;font-size:14px;">
-    <div style="font-size:12px;color:#475569;background:#f1f5f9;padding:10px;border-radius:20px;margin:16px 0;">Contact administrator to recharge points.</div>
-    <div style="display:flex;justify-content:flex-end;gap:10px;">
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px;">
       <button class="secondary" onclick="closeRechargeModal()">Close</button>
       <button class="accent" id="saveKeyBtn" onclick="applyRecharge()">Verify key</button>
     </div>
@@ -1222,7 +1284,9 @@
 <script>
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  /* --- Top Guide Bar Messenger --- */
+  const BUY_WHATSAPP_MSG = "Id खरीदने के लिये 9767785353 इस नंबर पर, अपना नाम, मोबाईल नंबर, शॉप का नाम और पता WhatsApp kre, ये सिर्फ Whatsapp नंबर हे इस पर फोन  ना करे.";
+  const MAX_FREE_POINTS = 5;
+
   function updateTopGuide(tag, text) {
     const guideTag = document.getElementById('guideTag');
     const guideText = document.getElementById('guideText');
@@ -1236,12 +1300,13 @@
     }
   }
 
-  /* --- License & Points API --- */
-  const API_URL = "https://script.google.com/macros/s/AKfycbxfyTQuHgy8fW0V1TKgiohHl6iYKg7_D_hOEGHGrSVsiktzJNmW6ZcxCnSowji4cjakOw/exec";
+  /* --- API Configuration --- */
+  const API_URL = "https://script.google.com/macros/s/AKfycbyLfeSL4HwKYokpGewpRAA8rXi1lIdF3mvVOPLrhkSBFnzbtLmJVoG4JyogieqCC2JY/exec";
   const DPICM = 118.110236;
   const PDF_RENDER_SCALE = 300 / 72;
 
   let activeLicenseKey = localStorage.getItem('app_license_key') || '';
+  let cachedClientIP = null;
 
   function updateAllPointDisplays(val) {
     document.querySelectorAll('.point-display-val').forEach(el => {
@@ -1249,48 +1314,132 @@
     });
   }
 
+  /* --- Public IP Resolver with Fallback --- */
+  async function getClientIP() {
+    if (cachedClientIP) return cachedClientIP;
+    const stored = localStorage.getItem('client_ip_cached');
+    if (stored) {
+      cachedClientIP = stored;
+      return stored;
+    }
+    try {
+      const res = await fetch('https://api.ipify.org?format=json');
+      const data = await res.json();
+      if (data && data.ip) {
+        cachedClientIP = data.ip;
+        localStorage.setItem('client_ip_cached', data.ip);
+        return data.ip;
+      }
+    } catch (e) {
+      console.warn('IP fetch error:', e);
+    }
+    cachedClientIP = 'client_' + Math.random().toString(36).substring(2, 10);
+    return cachedClientIP;
+  }
+
+  function showPurchaseNotice() {
+    document.getElementById('trialMessageBanner').style.display = 'block';
+    openRechargeModal();
+    alert(BUY_WHATSAPP_MSG);
+  }
+
+  /* --- Initialize IP Backend Rate Limiting or Active License --- */
+  async function initTrialOrLicense() {
+    if (activeLicenseKey) {
+      document.getElementById('rechargeKey').value = activeLicenseKey;
+      await syncPoints(false);
+      return;
+    }
+
+    const ip = await getClientIP();
+    try {
+      const r = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'trial_check', clientIp: ip })
+      });
+      const d = await r.json();
+      if (d.success) {
+        updateAllPointDisplays(`${d.remainingPoints} (Free)`);
+        if (d.remainingPoints <= 0) {
+          showPurchaseNotice();
+        }
+      } else {
+        fallbackLocalTrialInit(ip);
+      }
+    } catch {
+      fallbackLocalTrialInit(ip);
+    }
+  }
+
+  function fallbackLocalTrialInit(ip) {
+    const ipKey = 'trial_pts_' + ip.replace(/[^a-zA-Z0-9]/g, '_');
+    let pts = localStorage.getItem(ipKey);
+    if (pts === null) {
+      pts = String(MAX_FREE_POINTS);
+      localStorage.setItem(ipKey, pts);
+    }
+    updateAllPointDisplays(`${pts} (Free)`);
+  }
+
   async function syncPoints(showModalOnEmpty = false) {
     if (!activeLicenseKey) return;
     try {
       const r = await fetch(API_URL, { method: "POST", body: JSON.stringify({ key: activeLicenseKey, action: "check" }) });
       const d = await r.json();
-      if (d.success) updateAllPointDisplays(d.remainingPoints);
-      else { 
+      if (d.success) {
+        updateAllPointDisplays(d.remainingPoints);
+        document.getElementById('trialMessageBanner').style.display = 'none';
+      } else { 
         updateAllPointDisplays("0"); 
-        if (showModalOnEmpty) { alert(d.message); openRechargeModal(); } 
+        if (showModalOnEmpty) showPurchaseNotice();
       }
     } catch { 
       updateAllPointDisplays("offline"); 
     }
   }
 
+  /* --- Deduct 1 Point via License or IP-limited Trial --- */
   async function verifyAndDeductPoint() {
-    if (!activeLicenseKey) { 
-      alert('License key required.'); 
-      openRechargeModal(); 
-      return false; 
-    }
+    const ip = await getClientIP();
+    const payload = activeLicenseKey 
+      ? { action: "deduct", key: activeLicenseKey } 
+      : { action: "trial_deduct", clientIp: ip };
+
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 9000);
       const r = await fetch(API_URL, { 
         method: "POST", 
-        body: JSON.stringify({ key: activeLicenseKey, action: "deduct" }),
+        body: JSON.stringify(payload),
         signal: controller.signal
       });
       clearTimeout(timeoutId);
       const d = await r.json();
+
       if (d.success) { 
-        updateAllPointDisplays(d.remainingPoints); 
+        const displayVal = d.isTrial ? `${d.remainingPoints} (Free)` : d.remainingPoints;
+        updateAllPointDisplays(displayVal);
         return true; 
       } else { 
-        alert(`Blocked: ${d.message}`); 
-        updateAllPointDisplays(d.remainingPoints ?? 0); 
-        openRechargeModal(); 
+        updateAllPointDisplays("0"); 
+        showPurchaseNotice(); 
         return false; 
       }
-    } catch (err) { 
-      alert(err.name === 'AbortError' ? 'Verification timed out. Please check your network and try again.' : 'Network error connecting to license server.'); 
+    } catch (err) {
+      if (!activeLicenseKey) {
+        const ipKey = 'trial_pts_' + ip.replace(/[^a-zA-Z0-9]/g, '_');
+        let pts = parseInt(localStorage.getItem(ipKey) || '0', 10);
+        if (pts > 0) {
+          pts -= 1;
+          localStorage.setItem(ipKey, pts.toString());
+          updateAllPointDisplays(`${pts} (Free)`);
+          return true;
+        } else {
+          showPurchaseNotice();
+          return false;
+        }
+      }
+      alert(err.name === 'AbortError' ? 'Verification timed out. Please check connection.' : 'Network connection issue.'); 
       return false; 
     }
   }
@@ -1300,7 +1449,7 @@
 
   async function applyRecharge() {
     const key = document.getElementById('rechargeKey').value.trim(), btn = document.getElementById('saveKeyBtn');
-    if (!key) return alert('Enter key.');
+    if (!key) return alert('Please enter a license key.');
     btn.disabled = true; btn.innerText = '…';
     try {
       const r = await fetch(API_URL, { method: "POST", body: JSON.stringify({ key, action: "check" }) });
@@ -1309,18 +1458,18 @@
         activeLicenseKey = key; 
         localStorage.setItem('app_license_key', key); 
         updateAllPointDisplays(d.remainingPoints); 
-        alert(`Verified! Points: ${d.remainingPoints}`); 
+        document.getElementById('trialMessageBanner').style.display = 'none';
+        alert(`Verified! Balance: ${d.remainingPoints} points`); 
         closeRechargeModal(); 
       } else {
         alert(`Failed: ${d.message}`);
       }
     } catch { 
-      alert('Server error.'); 
+      alert('Verification server error.'); 
     }
     btn.disabled = false; btn.innerText = 'Verify key';
   }
 
-  /* --- Top Navigation Switcher --- */
   function switchStudioMode(mode) {
     const idSection = document.getElementById('smartIdSection');
     const passportSection = document.getElementById('passportSection');
@@ -1329,7 +1478,7 @@
       document.body.className = 'mode-passport';
       idSection.style.display = 'none';
       passportSection.style.display = 'block';
-      updateTopGuide('PASSPORT STUDIO', '📸 Click <b>"+ Add Profile Face"</b> to load photos, adjust sizing, then print.');
+      updateTopGuide('PASSPORT STUDIO', '📸 Click <b>"+ Add Photo"</b> (deducts 1 pt), arrange copies, then print free.');
       updatePassportLayout();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -1350,9 +1499,7 @@
   let isPhotoSelectionMode = false, photoRect = null;
 
   let currentZoom = 1.0;
-  let baseDisplayWidth = 0;
-  let baseDisplayHeight = 0;
-
+  let baseDisplayWidth = 0, baseDisplayHeight = 0;
   let isSpacePressed = false, isPanning = false;
   let panStartX = 0, panStartY = 0, scrollStartX = 0, scrollStartY = 0;
 
@@ -1379,7 +1526,6 @@
   const zoomControlsGroup = document.getElementById('zoomControlsGroup'), zoomVal = document.getElementById('zoomVal');
   const restoreBanner = document.getElementById('restoreBanner');
 
-  /* Card Gap Arranging Inputs */
   const cardRowGapInput = document.getElementById('cardRowGap');
   const cardColGapInput = document.getElementById('cardColGap');
 
@@ -1396,7 +1542,7 @@
   cardRowGapInput.addEventListener('input', updateCardSheetGap);
   cardColGapInput.addEventListener('input', updateCardSheetGap);
 
-  /* --- IndexedDB Storage for ID Cards & Passport Profiles --- */
+  /* --- IndexedDB Storage --- */
   const DB_NAME = 'SmartIDStudioDB_v2', STORE_CARDS = 'savedPrintCards', STORE_PASSPORT = 'savedPassportProfiles';
   function getDB() {
     return new Promise((resolve, reject) => {
@@ -1466,22 +1612,14 @@
   }
 
   window.addEventListener('DOMContentLoaded', async () => {
-    if (!activeLicenseKey) { 
-      updateAllPointDisplays('—'); 
-      openRechargeModal(); 
-    } else { 
-      document.getElementById('rechargeKey').value = activeLicenseKey; 
-      syncPoints(false); 
-    }
+    await initTrialOrLicense();
 
-    // Restore Card Spacing gaps
     const savedRow = localStorage.getItem('card_row_gap');
     const savedCol = localStorage.getItem('card_col_gap');
     if (savedRow !== null) cardRowGapInput.value = savedRow;
     if (savedCol !== null) cardColGapInput.value = savedCol;
     updateCardSheetGap();
 
-    // Restore Passport Border settings
     const savedBorderW = localStorage.getItem('pass_border_width');
     const savedBorderC = localStorage.getItem('pass_border_color');
     const savedBorderK = localStorage.getItem('pass_border_check');
@@ -1490,7 +1628,6 @@
     if (savedBorderK !== null) passBorderCheck.checked = (savedBorderK === '1');
     updatePassportBorder();
 
-    // Auto-restore ID cards
     const savedCards = await dbLoadAllCards();
     if (savedCards && savedCards.length > 0) {
       savedCards.forEach(c => appendCardToSheet(c.id, c.cardDataUrl, c.wCm, c.hCm, false));
@@ -1499,7 +1636,6 @@
       setTimeout(() => { restoreBanner.style.display = 'none'; }, 6000);
     }
 
-    // Auto-restore Passport Photos
     const savedProfiles = await dbLoadPassportProfiles();
     if (savedProfiles && savedProfiles.length > 0) {
       personList = savedProfiles;
@@ -1522,7 +1658,7 @@
     isPhotoSelectionMode = !isPhotoSelectionMode;
     togglePhotoSelectBtn.textContent = isPhotoSelectionMode ? '✧ Drag on photo area' : 'Draw photo selection';
     togglePhotoSelectBtn.classList.toggle('warning', isPhotoSelectionMode);
-    if (isPhotoSelectionMode) updateTopGuide('PHOTO BOOST', '🎯 Drag a selection directly over the <b>face photo</b> to selectively brighten & boost clarity.');
+    if (isPhotoSelectionMode) updateTopGuide('PHOTO BOOST', '🎯 Drag a selection directly over the <b>face photo</b> to boost clarity.');
     else setWorkflowStep(currentStep);
   });
 
@@ -1683,7 +1819,6 @@
         photoOverlay.style.height = photoRect.height + 'px';
       }
     }
-
     if (photoRect) updateLivePhotoOverlay();
   }
 
@@ -1700,8 +1835,7 @@
     if ((!currentPdf && !currentImage) || currentStep === 'idle') return;
     if (e.ctrlKey || e.metaKey) {
       e.preventDefault();
-      const delta = e.deltaY < 0 ? 0.1 : -0.1;
-      applyZoom(currentZoom + delta, true);
+      applyZoom(currentZoom + (e.deltaY < 0 ? 0.1 : -0.1), true);
     }
   }, { passive: false });
 
@@ -1809,8 +1943,7 @@
       return;
     }
 
-    if (currentStep === 'idle') return;
-    if (e.button !== 0) return;
+    if (currentStep === 'idle' || e.button !== 0) return;
 
     const rect = pdfCanvas.getBoundingClientRect();
     if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
@@ -1943,7 +2076,7 @@
       nextStepBtn.textContent = isSingle ? 'Capture Card' : 'Capture front'; 
       nextStepBtn.style.display = 'inline-block'; 
       if (addCardWrapper) addCardWrapper.style.display = 'none'; 
-      if (isSingle) updateTopGuide('STEP 2', '✂️ Drag a box on the document to select the <b>Single PVC Card</b>, then click <b>"Capture Card"</b>.');
+      if (isSingle) updateTopGuide('STEP 2', '✂️ Drag a box on the document to select the <b>Single Card</b>, then click <b>"Capture Card"</b>.');
       else updateTopGuide('STEP 2', '✂️ Drag a box on the document to select the <b>FRONT side</b>, then click <b>"Capture Front"</b>.');
     } else if (step === 'back') { 
       stepLabel.textContent = 'Step 2: select BACK'; 
@@ -1952,7 +2085,7 @@
       if (addCardWrapper) addCardWrapper.style.display = 'none'; 
       photoAdjustControls.style.display = 'none'; 
       photoRect = null; 
-      updateTopGuide('STEP 3', '🔄 Drag a box to select the <b>BACK side</b>, then click <b>"Capture Back"</b> (or choose 2nd image file).');
+      updateTopGuide('STEP 3', '🔄 Drag a box to select the <b>BACK side</b>, then click <b>"Capture Back"</b>.');
     } else if (step === 'ready') { 
       stepLabel.textContent = 'Ready to add!'; 
       nextStepBtn.style.display = 'none'; 
@@ -1966,7 +2099,7 @@
     if (currentStep === 'front') {
       const crop = getSelectedCropData(true);
       if (!crop) {
-        alert(isSingle ? 'Please drag on the canvas to select the card first.' : 'Please drag on the canvas to select the FRONT of the card first.');
+        alert(isSingle ? 'Please select the card area.' : 'Please select the FRONT first.');
         return;
       }
       frontCropData = crop;
@@ -1982,7 +2115,7 @@
     } else if (currentStep === 'back') { 
       const crop = getSelectedCropData(false);
       if (!crop) {
-        alert('Please drag on the canvas to select the BACK of the card first.');
+        alert('Please select the BACK first.');
         return;
       }
       backCropData = crop; 
@@ -2023,7 +2156,6 @@
     const copyBtn = document.createElement('button');
     copyBtn.className = 'mini-btn';
     copyBtn.textContent = '➕ Copy';
-    copyBtn.title = 'Add another copy of this card to sheet';
     copyBtn.onclick = () => {
       const newId = 'card_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
       appendCardToSheet(newId, cardDataUrl, wCm, hCm, true);
@@ -2062,7 +2194,7 @@
   addCardBtn.addEventListener('click', async () => {
     const { wCm, hCm, isVertical, isSingle } = getTargetDimensions();
     if (!frontCropData || (!isSingle && !backCropData)) {
-      alert(isSingle ? 'Missing card crop data. Please capture the card.' : 'Missing front or back crop data. Please capture both sides.');
+      alert(isSingle ? 'Capture the card first.' : 'Capture both sides first.');
       return;
     }
 
@@ -2161,7 +2293,7 @@
       stageWrapper.style.display = 'none';
       setWorkflowStep('idle');
       stepLabel.textContent = '✓ Card added! Ready for next file.';
-      updateTopGuide('PRINT READY', '🖨️ Card added to A4 print sheet! Click <b>"Print sheet"</b> to print, or upload another document.');
+      updateTopGuide('PRINT READY', '🖨️ Card added to A4 print sheet! Click <b>"Print sheet"</b> to print.');
 
       setTimeout(() => {
         a4Sheet.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -2183,7 +2315,10 @@
     clearSheetBtn.disabled = !has; 
   }
   
-  function handlePrintSheet() { window.print(); }
+  function handlePrintSheet() { 
+    document.body.className = 'mode-id';
+    window.print(); 
+  }
   
   clearSheetBtn.addEventListener('click', async () => { 
     if (confirm('Clear all cards from the print sheet?')) { 
@@ -2241,29 +2376,49 @@
   passBorderWidthInput.addEventListener('input', () => { updatePassportBorder(); });
   passBorderColorInput.addEventListener('input', () => { updatePassportBorder(); });
 
+  /* --- ADD PHOTO CLICK: Instant deduction before file browser opens --- */
+  async function handleAddPhotoClick() {
+    const tile = document.getElementById('addPhotoTile');
+    tile.style.pointerEvents = 'none';
+    tile.style.opacity = '0.5';
+
+    try {
+      const allowed = await verifyAndDeductPoint();
+      if (!allowed) {
+        return;
+      }
+      passportFileLoader.value = "";
+      passportFileLoader.click();
+    } finally {
+      tile.style.pointerEvents = 'auto';
+      tile.style.opacity = '1';
+    }
+  }
+
   passportFileLoader.addEventListener('change', function(e) {
     const files = Array.from(e.target.files);
     if (!files.length) return;
-    files.forEach(file => {
-      const r = new FileReader();
-      r.onload = function(evt) {
-        personCounter++;
-        personList.push({
-          id: personCounter,
-          src: evt.target.result,
-          qty: 6,
-          zoom: 100,
-          panX: 0,
-          panY: 0,
-          brightness: 100,
-          contrast: 100
-        });
-        renderPassportCards();
-        updatePassportLayout();
-        saveProfiles();
-      };
-      r.readAsDataURL(file);
-    });
+
+    // Load selected image
+    const file = files[0];
+    const r = new FileReader();
+    r.onload = function(evt) {
+      personCounter++;
+      personList.push({
+        id: personCounter,
+        src: evt.target.result,
+        qty: 6,
+        zoom: 100,
+        panX: 0,
+        panY: 0,
+        brightness: 100,
+        contrast: 100
+      });
+      renderPassportCards();
+      updatePassportLayout();
+      saveProfiles();
+    };
+    r.readAsDataURL(file);
     passportFileLoader.value = "";
   });
 
@@ -2279,7 +2434,7 @@
   }
 
   function clearAllPassportPhotos() {
-    if (confirm('Remove all profile faces from the Passport Studio?')) {
+    if (confirm('Remove all photos from the Passport Studio?')) {
       personList = [];
       renderPassportCards();
       updatePassportLayout();
@@ -2382,22 +2537,13 @@
     });
   }
 
-  async function handlePrintPassportSheet() {
+  /* Free Print Trigger (points already charged on click) */
+  function handlePrintPassportSheet() {
     if (personList.length === 0) {
-      alert('Please add at least one profile photo first.');
+      alert('Please add at least one photo first.');
       return;
     }
-
-    const printBtn = document.getElementById('passportPrintBtn');
-    printBtn.disabled = true;
-    printBtn.innerText = 'Verifying points…';
-
-    const allowed = await verifyAndDeductPoint();
-    printBtn.disabled = false;
-    printBtn.innerText = '🖨️ Print Ready A4 Sheet Matrix (1 pt)';
-
-    if (!allowed) return;
-
+    document.body.className = 'mode-passport';
     window.print();
   }
 </script>
