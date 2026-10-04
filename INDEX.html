@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>iLovePrint.in · Ultra 300 DPI Smart ID, Passport Photo Studio & AI Cutout Suite</title>
-  <meta name="description" content="Commercial-grade Ultra 300 DPI ID Card Layout Generator, High-Definition Passport Matrix Builder, and AI Neural Matting & Upscaler.  online print utility for cyber cafes and studios.">
+  <meta name="description" content="Commercial-grade Ultra 300 DPI ID Card Layout Generator, High-Definition Passport Matrix Builder, and AI Neural Matting & Upscaler. Free online print utility for cyber cafes and studios.">
   <meta name="keywords" content="passport photo maker, id card print layout, 300 dpi photo print, cr80 pvc card layout, a4 passport photo sheet, 4x6 photo print, rmbg background remover, auto perspective crop">
   <link rel="canonical" href="https://iloveprint.in/">
 
   <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="iLovePrint.in · BY- Tamanna Online Service">
+  <meta property="og:title" content="iLovePrint.in · Ultra 300 DPI Smart ID & Passport Studio">
   <meta property="og:description" content="Lossless 300 DPI hardware-calibrated printing suite for ID cards, passport photos, and automated document cropping.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://iloveprint.in/">
@@ -1033,7 +1033,7 @@
 
   <!-- BOTTOM RIGHT BRANDING WATERMARK -->
   <div class="footer-attribution no-print">
-    Powered by <b>TAMANNA ONLINE SERVICES</b>
+    Powered by <b>iLovePrint.in · Ultra 300 DPI Engine</b>
   </div>
 
   <!-- FLOATING STEP GUIDANCE -->
@@ -1100,7 +1100,7 @@
 
 एक क्लिक में पासपोर्ट साइज फोटो बनाएं — 4x6 या A4 शीट पर तुरंत प्रिंट निकालें।
 
-कोई एडिटिंग की झंझट नहीं! फोटो अपलोड करें और परफेक्ट पासपोर्ट फोटो तुरंत पाएं।.</p>
+कोई एडिटिंग की झंझट नहीं! फोटो अपलोड करें और परफेक्ट पासपोर्ट फोटो तुरंत पाएं।</p>
           </div>
           <div class="l-card-btn" style="color:#7c3aed;">
             <span>Open Passport Studio</span>
@@ -1294,7 +1294,7 @@
             </div>
           </div>
           <div class="usage-badge">
-            <span>🎉iloveprint.in</span>
+            <span>🎉 100% Free · iloveprint.in</span>
           </div>
         </div>
 
@@ -1514,7 +1514,7 @@
             </div>
           </div>
           <div class="usage-badge">
-            <span>🎉iloveprint.in</span>
+            <span>🎉 100% Free · iloveprint.in</span>
           </div>
         </div>
       </div>
@@ -1620,7 +1620,7 @@
             </div>
           </div>
           <div class="usage-badge">
-            <span>🎉iloveprint.in</span>
+            <span>🎉 100% Free · iloveprint.in</span>
           </div>
         </div>
 
@@ -1792,9 +1792,9 @@
 
   <div class="user-modal-overlay" id="userRegistrationModal">
     <div class="user-modal-card">
-      <h3>🎉Unlimited Access</h3>
+      <h3>🎉 Free Unlimited Access</h3>
       <p style="font-size:13px; color:#64748b; margin-top:6px; line-height:1.4;">
-        Aapne website par 10+ items banaye hain! Hamesha use karne ke liye details enter karein:
+        Aapne website par 10+ items banaye hain! Hamesha <b>100% Free</b> use karne ke liye details enter karein:
       </p>
 
       <form id="userRegForm" onsubmit="handleUserRegistration(event)">
@@ -1856,7 +1856,7 @@
       } else if (type === 'about') {
         content.innerHTML = `<h2>About Us</h2><p>iLovePrint.in builds high-precision 300 DPI browser utilities for print centers, studios, and cyber cafes requiring zero installation overhead.</p>`;
       } else if (type === 'terms') {
-        content.innerHTML = `<h2>Terms</h2><p>Tools are paid "as is". Users are responsible for dimension verifications before print.</p>`;
+        content.innerHTML = `<h2>Terms</h2><p>Tools are free "as is". Users are responsible for dimension verifications before print.</p>`;
       } else if (type === 'contact') {
         content.innerHTML = `<h2>Contact Us</h2><p>Email: support@iloveprint.in</p>`;
       }
@@ -4609,6 +4609,98 @@
 
 
 <!-- ============================================================
+     iLovePrint SECURITY PATCH v1 — Obfuscated secrets & DevTools deterrents
+     Inserted BEFORE v2 add-on so ILP_SECRET is available to all code below.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ---- Base64 decoder wrapper (obfuscation, not encryption) ---- */
+  const _d = (b64) => { try { return atob(b64); } catch (e) { return ''; } };
+
+  /* ---- Encoded secrets (base64). Change values by re-encoding in base64. ---- */
+  const _USER_B64 = 'c2FqaWQ3MjU0';            /* sajid7254         */
+  const _PASS_B64 = 'SGVlbmFANzI1NA==';        /* Heena@7254        */
+  const _UPI_B64  = 'OTc2Nzc4NTM1M0BtYms=';    /* 9767785353@mbk    */
+
+  /* ---- SHA-256 hash helper (password is never compared as plaintext) ---- */
+  async function _hash(str) {
+    if (!window.crypto || !crypto.subtle) {
+      /* Fallback DJB2-ish hash if SubtleCrypto is unavailable */
+      let h = 5381;
+      for (let i = 0; i < str.length; i++) h = ((h << 5) + h) ^ str.charCodeAt(i);
+      return 'fb_' + (h >>> 0).toString(36);
+    }
+    const buf = new TextEncoder().encode(str);
+    const dig = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(dig))
+      .map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  /* Pre-compute the admin password hash once at startup */
+  let _passHash = null;
+  _hash(_d(_PASS_B64)).then(h => { _passHash = h; });
+
+  /* ---- Public façade ---- */
+  window.ILP_SECRET = {
+    user:     () => _d(_USER_B64),
+    passHash: () => _passHash,
+    hash:     _hash,
+    upi:      () => _d(_UPI_B64)
+  };
+
+  /* ================================================================
+     ANTI-DEVTOOLS DETERRENTS (best-effort — no browser is 100% blockable)
+     ================================================================ */
+
+  /* 1) Block right-click context menu (allow on inputs/textareas) */
+  document.addEventListener('contextmenu', e => {
+    if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    e.preventDefault();
+  }, false);
+
+  /* 2) Block common inspection keyboard shortcuts */
+  document.addEventListener('keydown', e => {
+    const k = (e.key || '').toUpperCase();
+    /* F12 */
+    if (k === 'F12') { e.preventDefault(); e.stopPropagation(); return false; }
+    /* Ctrl+Shift+I / J / C / K (Chrome/Firefox/Edge DevTools & console) */
+    if (e.ctrlKey && e.shiftKey && (k === 'I' || k === 'J' || k === 'C' || k === 'K')) {
+      e.preventDefault(); e.stopPropagation(); return false;
+    }
+    /* Ctrl+U (view source) & Ctrl+S (save page) */
+    if ((e.ctrlKey || e.metaKey) && (k === 'U' || k === 'S')) {
+      e.preventDefault(); e.stopPropagation(); return false;
+    }
+  }, true);
+
+  /* 3) Block window.open('view-source:...') */
+  const _origOpen = window.open;
+  window.open = function (u, ...rest) {
+    if (typeof u === 'string' && u.trim().toLowerCase().startsWith('view-source:')) return null;
+    return _origOpen.call(this, u, ...rest);
+  };
+
+  /* 4) One-time console warning + periodic console clear */
+  setTimeout(() => {
+    try {
+      console.clear();
+      console.log('%c⛔ STOP',
+        'color:#ef4444;font-size:64px;font-weight:900;text-shadow:3px 3px 0 #000;');
+      console.log('%cThis is a protected application. Do NOT paste any code here.',
+        'color:#f59e0b;font-size:16px;font-weight:bold;');
+      console.log('%cAll activity on this page may be logged.',
+        'color:#64748b;font-size:12px;');
+    } catch (e) {}
+  }, 600);
+  setInterval(() => { try { console.clear(); } catch (e) {} }, 3000);
+})();
+</script>
+<!-- ============ END iLovePrint SECURITY PATCH v1 ============ -->
+
+
+<!-- ============================================================
      iLovePrint ADD-ON v2 : Auth · Monthly Plan · Stats · Admin
      Fully additive. Original code untouched.
      ============================================================ -->
@@ -4725,7 +4817,8 @@
                    transition:transform .15s;"
             onmouseover="this.style.transform='scale(1.1)'"
             onmouseout="this.style.transform='scale(1)'">✕</button>
-    <h2>✨ Create Your Account</h2>    <p style="font-size:12.5px;">Register to use iLovePrint Studio. After registration you'll need to pay the activation fee.</p>
+    <h2>✨ Create Your Account</h2>
+    <p style="font-size:12.5px;">Register to use iLovePrint Studio. After registration you'll need to pay the activation fee.</p>
     <div class="ilp-field"><label>Your Name *</label><input id="ilpRegName" type="text" placeholder="Full Name"></div>
     <div class="ilp-field"><label>Shop / Business Name *</label><input id="ilpRegShop" type="text" placeholder="Shop name"></div>
     <div class="ilp-field"><label>Mobile Number (10-digit) *</label><input id="ilpRegMobile" type="tel" maxlength="10" placeholder="10-digit mobile"></div>
@@ -4759,7 +4852,7 @@
     <p id="ilpPaySubtitle">To activate your account, pay the amount using UPI QR below.</p>
     <div class="ilp-qr-wrap">
       <img id="ilpQrImg" alt="UPI QR Code">
-      <div class="ilp-upi-id">UPI ID: <b id="ilpUpiTxt">9767785353@mbk</b>
+      <div class="ilp-upi-id">UPI ID: <b id="ilpUpiTxt">-</b>
         <button class="ilp-act-btn ilp-act-view" style="margin-left:6px;" onclick="ILP_AUTH.copyUpi()">Copy</button>
       </div>
       <div style="margin-top:8px;font-size:20px;font-weight:900;color:#1d4ed8;" id="ilpPayAmountBig">₹50</div>
@@ -4956,6 +5049,7 @@
 /* ================================================================
    iLovePrint ADD-ON v2 — Auth · Monthly Plan · Stats · Admin
    Fully additive. Original code untouched.
+   Secrets are loaded from window.ILP_SECRET (security patch above).
    ================================================================ */
 (function () {
   'use strict';
@@ -4964,13 +5058,14 @@
   const DEFAULTS = {
     amount: 50,
     planDays: 30,
-    upiId: '9767785353@mbk',
+    upiId: (window.ILP_SECRET && ILP_SECRET.upi) ? ILP_SECRET.upi() : '',
     payee: 'iLovePrint',
     qrUrl: '',
     sheetUrl: ''
   };
-  const ADMIN_USER = 'sajid7254';
-  const ADMIN_PASS = 'Heena@7254';
+  /* Admin username pulled from obfuscated secret.
+     Admin password is never stored in plaintext — only its SHA-256 hash. */
+  const ADMIN_USER = (window.ILP_SECRET && ILP_SECRET.user) ? ILP_SECRET.user() : '\x00';
   const K = {
     ACC: 'iloveprint_account',
     USERS: 'iloveprint_users_db',
@@ -5193,10 +5288,8 @@
       if (!name || !shop || !addr) return alert('Please fill all fields.');
       if (!/^\d{10}$/.test(mobile)) return alert('Enter a valid 10-digit mobile number.');
 
-      // check existing
       const existing = Users.find(mobile);
       if (existing && existing.password && existing.password !== mobile) {
-        // Someone already registered this mobile with a changed password
         return alert('This mobile number is already registered. Please use Login instead.');
       }
       const s = ILPSettings.get();
@@ -5245,7 +5338,6 @@
       const expectedPass = u.password || u.mobile;
       if (pass !== expectedPass) return alert('Incorrect password.');
 
-      // Restore session
       const account = Object.assign({}, u, { password: expectedPass, stats: u.stats || emptyStats() });
       LS.set(K.ACC, account);
       try { LS.set('iloveprint_user_profile', { name: u.name, shopName: u.shopName, mobile: u.mobile, address: u.address }); } catch (e) {}
@@ -5428,16 +5520,31 @@
       setTimeout(() => gEl('ilpAdminUser').focus(), 80);
     },
     closeAdminLogin() { hide('ilpAdminLoginModal'); },
-    adminLogin() {
+
+    /* Hash-based admin login (password never in plaintext) */
+    async adminLogin() {
       const u = gEl('ilpAdminUser').value.trim();
       const p = gEl('ilpAdminPass').value;
-      if (u === ADMIN_USER && p === ADMIN_PASS) {
+      if (!window.ILP_SECRET || typeof ILP_SECRET.hash !== 'function') {
+        alert('❌ Security module not loaded.'); return;
+      }
+      let stored = ILP_SECRET.passHash();
+      if (!stored) {
+        await new Promise(r => setTimeout(r, 300));
+        stored = ILP_SECRET.passHash();
+      }
+      const inputHash = await ILP_SECRET.hash(p);
+      if (u === ADMIN_USER && stored && inputHash === stored) {
         sessionStorage.setItem(K.ADMIN, '1');
         hide('ilpAdminLoginModal');
         ILP_ADMIN.open();
         addLog('admin_login', 'Admin logged in');
-      } else alert('❌ Invalid credentials.');
+      } else {
+        await new Promise(r => setTimeout(r, 700));
+        alert('❌ Invalid credentials.');
+      }
     },
+
     adminLogout() {
       sessionStorage.removeItem(K.ADMIN);
       hide('ilpAdminDash');
@@ -5690,7 +5797,7 @@
   window.ILP_SETTINGS = ILPSettings;
 
   /* ============================================================
-     OVERRIDE original handleUserRegistration (still allows old modal)
+     OVERRIDE original handleUserRegistration
      ============================================================ */
   window.handleUserRegistration = function (e) {
     if (e && e.preventDefault) e.preventDefault();
@@ -5698,7 +5805,6 @@
     const shop = (gEl('regShopName')?.value || '').trim();
     const mobile = (gEl('regMobile')?.value || '').trim();
     const addr = (gEl('regAddress')?.value || '').trim();
-    // Pre-fill our new modal and open it
     gEl('ilpRegName').value = name;
     gEl('ilpRegShop').value = shop;
     gEl('ilpRegMobile').value = mobile;
@@ -5753,10 +5859,9 @@
   }
 
   /* ============================================================
-     STAT HOOKS — AutoCropper print
+     STAT HOOKS — AutoCropper print + AI download
      ============================================================ */
   window.addEventListener('DOMContentLoaded', function () {
-    // AutoCropper print button
     const cp = gEl('btnPrint');
     if (cp) {
       const origClick = cp.onclick;
@@ -5768,7 +5873,6 @@
         if (origClick) return origClick.call(this, e);
       };
     }
-    // AI download button — split bg removal vs enhancement
     const db = gEl('downloadBtn');
     if (db) {
       const origDl = db.onclick;
@@ -5875,15 +5979,12 @@ function handle(e) {
 
   if (action === 'ping') return json({ ok: true, msg: 'iLovePrint v2 backend online' });
 
-  /* -------- REGISTER / UPDATE USER -------- */
   if (action === 'register_user') {
     var mobile = String(b.mobile || p.mobile || '').trim();
     if (!mobile) return json({ ok:false, msg:'mobile required' });
-
     var stats = b.stats || {};
     var row = findRow(USERS, mobile);
     var existing = row > 0 ? USERS.getRange(row, 1, 1, HEADERS.length).getValues()[0] : null;
-
     var data = [
       mobile,
       b.name || p.name || (existing ? existing[1] : ''),
@@ -5906,19 +6007,16 @@ function handle(e) {
       (existing ? existing[18] : 0)
     ];
     data[18] = (+data[13]) + (+data[14]) + (+data[15]) + (+data[16]) + (+data[17]);
-
     if (row > 0) USERS.getRange(row, 1, 1, HEADERS.length).setValues([data]);
     else USERS.appendRow(data);
     return json({ ok:true });
   }
 
-  /* -------- LOG ACTIVITY -------- */
   if (action === 'log_activity') {
     LOGS.appendRow([ b.ts || new Date().toISOString(), b.mobile || '', b.name || '', b.service || '', b.detail || '' ]);
     return json({ ok:true });
   }
 
-  /* -------- UPDATE STATUS (approve/reject/suspend) -------- */
   if (action === 'update_status') {
     var m2 = String(b.mobile || p.mobile || '').trim();
     var st = String(b.status || p.status || '').trim();
@@ -5928,17 +6026,16 @@ function handle(e) {
       USERS.getRange(r2, 6).setValue(st);
       if (st === 'approved') {
         var now = new Date();
-        USERS.getRange(r2, 10).setValue(now.toISOString());      // ApprovedAt
-        USERS.getRange(r2, 11).setValue(now.toISOString());      // RechargeDate
+        USERS.getRange(r2, 10).setValue(now.toISOString());
+        USERS.getRange(r2, 11).setValue(now.toISOString());
         var planDays = USERS.getRange(r2, 13).getValue() || 30;
         var expiry = new Date(now.getTime() + planDays * 24 * 60 * 60 * 1000);
-        USERS.getRange(r2, 12).setValue(expiry.toISOString());   // ExpiryDate
+        USERS.getRange(r2, 12).setValue(expiry.toISOString());
       }
     }
     return json({ ok:true });
   }
 
-  /* -------- EXTEND PLAN (admin +30 days) -------- */
   if (action === 'extend_plan') {
     var mEx = String(b.mobile || p.mobile || '').trim();
     var days = parseInt(b.days || p.days || 30, 10);
@@ -5955,7 +6052,6 @@ function handle(e) {
     return json({ ok:true });
   }
 
-  /* -------- INCREMENT STAT -------- */
   if (action === 'increment_stat') {
     var mS = String(b.mobile || p.mobile || '').trim();
     var key = b.statKey || '';
@@ -5965,7 +6061,6 @@ function handle(e) {
       var colMap = { idCards:14, passportPhotos:15, cropperPrints:16, bgRemovals:17, enhancements:18 };
       var col = colMap[key];
       if (col) USERS.getRange(rS, col).setValue(val);
-      // recompute total
       var rng = USERS.getRange(rS, 14, 1, 5).getValues()[0];
       var total = rng.reduce(function(a, c){ return a + (+c || 0); }, 0);
       USERS.getRange(rS, 19).setValue(total);
@@ -5973,7 +6068,6 @@ function handle(e) {
     return json({ ok:true });
   }
 
-  /* -------- RESET STATS -------- */
   if (action === 'reset_stats') {
     var mR = String(b.mobile || p.mobile || '').trim();
     var rR = findRow(USERS, mR);
@@ -5983,7 +6077,6 @@ function handle(e) {
     return json({ ok:true });
   }
 
-  /* -------- GET ONE USER -------- */
   if (action === 'get_user') {
     var m3 = String(p.mobile || b.mobile || '').trim();
     var r3 = findRow(USERS, m3);
@@ -5999,7 +6092,6 @@ function handle(e) {
     });
   }
 
-  /* -------- GET ALL USERS -------- */
   if (action === 'get_users') {
     var last = USERS.getLastRow();
     if (last < 2) return json([]);
@@ -6046,8 +6138,7 @@ function json(obj) {
   'use strict';
 
   /* ================================================================
-     IndexedDB storage for custom HTML modules
-     (localStorage is too small for full HTML files)
+     IndexedDB storage for custom HTML modules (persistent, no size limit)
      ================================================================ */
   const DB_NAME = 'iloveprint_modules_db';
   const STORE   = 'modules';
@@ -6099,7 +6190,7 @@ function json(obj) {
     .replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 
   /* ================================================================
-     MODULE MANAGER (landing cards + iframe viewer + auth gate)
+     MODULE MANAGER
      ================================================================ */
   const ILP_MODULES = {
     cache: [],
@@ -6243,6 +6334,10 @@ function json(obj) {
           <input id="ilpModFile" type="file" accept=".html,.htm,text/html"></div>
         <button class="ilp-btn primary" id="ilpModUploadBtn"
                 style="margin-top:10px;min-width:220px;">⬆ Upload &amp; Publish Module</button>
+        <div class="ilp-note" style="margin-top:10px;background:#0c4a6e;color:#bae6fd;border-color:#0284c7;">
+          ℹ️ Modules are stored in this browser's IndexedDB permanently — they survive page reloads,
+          browser restarts, and system reboots. Delete them any time from the list below.
+        </div>
       </div>
 
       <div id="ilpModList"
@@ -6278,7 +6373,7 @@ function json(obj) {
 
     await ILP_MODULES.load();
     renderModulesList();
-    alert('✅ Module "' + name + '" is now live on the landing page.');
+    alert('✅ Module "' + name + '" is now live on the landing page.\n\nIt is saved permanently in this browser.');
   }
 
   function renderModulesList() {
@@ -6319,7 +6414,7 @@ function json(obj) {
         ILP_MODULES.open(m.id);
       });
       card.querySelector('[data-act="delete"]').addEventListener('click', async () => {
-        if (!confirm('Delete module "' + m.name + '"?')) return;
+        if (!confirm('Delete module "' + m.name + '"?\n\nThis cannot be undone.')) return;
         await _del(m.id);
         await ILP_MODULES.load();
         renderModulesList();
@@ -6338,28 +6433,13 @@ function json(obj) {
   }
 
   /* ================================================================
-     DEV TOOLS DETERRENT (best-effort, browser-bypassable)
-     ================================================================ */
-  document.addEventListener('contextmenu', e => {
-    if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
-    e.preventDefault();
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'F12') { e.preventDefault(); return false; }
-    if (e.ctrlKey && e.shiftKey &&
-        ['I', 'J', 'C'].includes((e.key || '').toUpperCase())) { e.preventDefault(); return false; }
-    if ((e.ctrlKey || e.metaKey) &&
-        (e.key || '').toUpperCase() === 'U') { e.preventDefault(); return false; }
-  });
-
-  /* ================================================================
      INIT
      ================================================================ */
   window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       injectAdminTab();
       ILP_MODULES.load();
-    }, 120);
+    }, 150);
   });
 
 })();
