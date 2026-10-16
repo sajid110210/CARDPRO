@@ -567,8 +567,8 @@
       height: auto;
       padding: var(--page-margin-top, 5mm) var(--page-margin-right, 5mm) var(--page-margin-bottom, 5mm) var(--page-margin-left, 5mm);
       display: grid; align-content: start; justify-content: start;
-      grid-template-columns: repeat(auto-fill, var(--photo-width, 3.1cm));
-      grid-gap: 2mm; box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+      grid-template-columns: repeat(var(--pass-cols, auto-fill), var(--photo-width, 3.1cm));
+      grid-gap: var(--pass-gap, 2mm); box-shadow: 0 16px 48px rgba(0,0,0,0.25);
       box-sizing: border-box;
       overflow: hidden;
     }
@@ -943,8 +943,8 @@
         max-height: var(--pass-paper-min-height, 297mm) !important;
         padding: var(--page-margin-top, 5mm) var(--page-margin-right, 5mm) var(--page-margin-bottom, 5mm) var(--page-margin-left, 5mm) !important;
         display: grid !important;
-        grid-template-columns: repeat(auto-fill, var(--photo-width, 3.1cm)) !important;
-        grid-gap: 2mm !important;
+        grid-template-columns: repeat(var(--pass-cols, auto-fill), var(--photo-width, 3.1cm)) !important;
+        grid-gap: var(--pass-gap, 2mm) !important;
         justify-content: start !important;
         align-content: start !important;
         page-break-after: avoid !important;
@@ -1693,8 +1693,8 @@
               <div class="size-inputs">
                 <div><label>Top</label><input type="number" id="passMarginTop" value="5" min="0" max="40"></div>
                 <div><label>Bottom</label><input type="number" id="passMarginBottom" value="5" min="0" max="40"></div>
-                <div><label>Left</label><input type="number" id="passMarginLeft" value="5" min="0" max="40"></div>
-                <div><label>Right</label><input type="number" id="passMarginRight" value="5" min="0" max="40"></div>
+                <div><label>Left</label><input type="number" id="passMarginLeft" value="3" min="0" max="40"></div>
+                <div><label>Right</label><input type="number" id="passMarginRight" value="3" min="0" max="40"></div>
               </div>
             </div>
 
@@ -3486,6 +3486,8 @@
 
     /* PASSPORT PHOTO STUDIO CONTROLLER */
     let currentPassportPreset = 'a4_row6';
+    document.documentElement.style.setProperty('--pass-cols', '6');
+    document.documentElement.style.setProperty('--pass-gap', '1.5mm');
 
     const passWidthCmInput = document.getElementById('passWidthCm');
     const passHeightCmInput = document.getElementById('passHeightCm');
@@ -3529,13 +3531,15 @@
         document.getElementById('presetA4RowBtn').classList.add('active');
         document.documentElement.style.setProperty('--pass-paper-width', '210mm');
         document.documentElement.style.setProperty('--pass-paper-min-height', '297mm');
+        document.documentElement.style.setProperty('--pass-cols', '6');
+        document.documentElement.style.setProperty('--pass-gap', '1.5mm');
         
         passWidthCmInput.value = '3.1';
         passHeightCmInput.value = '3.8';
         passMarginTopInput.value = '5';
         passMarginBottomInput.value = '5';
-        passMarginLeftInput.value = '5';
-        passMarginRightInput.value = '5';
+        passMarginLeftInput.value = '3';
+        passMarginRightInput.value = '3';
         passFillPage.checked = false;
 
         personList.forEach(p => p.qty = 6);
@@ -3544,6 +3548,8 @@
         document.getElementById('preset4x6Btn').classList.add('active');
         document.documentElement.style.setProperty('--pass-paper-width', '152.4mm');
         document.documentElement.style.setProperty('--pass-paper-min-height', '101.6mm');
+        document.documentElement.style.setProperty('--pass-cols', 'auto-fill');
+        document.documentElement.style.setProperty('--pass-gap', '2mm');
         
         passWidthCmInput.value = '3.4';
         passHeightCmInput.value = '4.3';
@@ -3831,6 +3837,8 @@
       } else {
         document.documentElement.style.setProperty('--pass-paper-width', '210mm');
         document.documentElement.style.setProperty('--pass-paper-min-height', '297mm');
+        document.documentElement.style.setProperty('--pass-cols', '6');
+        document.documentElement.style.setProperty('--pass-gap', '1.5mm');
         pageStyle.textContent = `
           @page { size: 210mm 297mm; margin: 0 !important; }
           html, body { width: 210mm !important; height: 297mm !important; max-height: 297mm !important; overflow: hidden !important; }
@@ -3838,6 +3846,8 @@
             width: 210mm !important; height: 297mm !important;
             min-height: 0 !important; max-height: 297mm !important;
             overflow: hidden !important;
+            grid-template-columns: repeat(6, var(--photo-width, 3.1cm)) !important;
+            grid-gap: 1.5mm !important;
           }
         `;
         passportA4Sheet.style.cssText = '';
