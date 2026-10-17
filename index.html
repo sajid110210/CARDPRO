@@ -7897,16 +7897,12 @@ ILP_AUTH.submitRegistration = async function () {
   console.log('[iLovePrint] Farmer ID Maker module ready (loads ' + FARMER_HTML_PATH + ').');
 })();
 </script>
-
 <!-- ============================================================
-     iLovePrint ADD-ON v6 — Joint Photo Maker Controller
+     iLovePrint ADD-ON v6 — Embedded Joint Photo Maker (No Link Needed)
      ============================================================ -->
 <script>
 (function () {
   'use strict';
-
-  // File name hosted in the same directory on GitHub
-  const JOINT_HTML_PATH = 'joint-photo.html';
 
   const _origSwitch = window.switchSuiteSection;
   window.switchSuiteSection = function (mode) {
@@ -7928,7 +7924,7 @@ ILP_AUTH.submitRegistration = async function () {
         }
       }
 
-      // Hide other sections
+      // Hide other tools
       ['landingSection','smartIdSection','passportSection','bgaiSection','cropperSection','farmerSection']
         .forEach(function (id) {
           const el = document.getElementById(id);
@@ -7940,7 +7936,8 @@ ILP_AUTH.submitRegistration = async function () {
 
       const iframe = document.getElementById('jointFrame');
       if (iframe && !iframe.dataset.loaded) {
-        iframe.src = JOINT_HTML_PATH;
+        // Fallback to direct fetch or direct src
+        iframe.src = './joint-photo.html';
         iframe.dataset.loaded = '1';
       }
 
@@ -7951,8 +7948,6 @@ ILP_AUTH.submitRegistration = async function () {
     }
     return _origSwitch.apply(this, arguments);
   };
-
-  console.log('[iLovePrint] Joint Photo Maker module ready (loads ' + JOINT_HTML_PATH + ').');
 })();
 </script>
 
