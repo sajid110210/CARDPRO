@@ -1218,23 +1218,31 @@
           </div>
         </div>
 
-	<!-- JOINT PASSPORT PHOTO CARD -->
-        <div class="landing-hub-card" onclick="switchSuiteSection('joint')">
-          <div>
-            <div class="l-card-top">
-              <div class="l-card-icon" style="background:#f5f3ff; color:#7c3aed;">👥</div>
-              <span class="l-badge-pill" style="background:#ede9fe; color:#6d28d9;">Couple / 2-Person</span>
-            </div>
-            <h3>Joint Photo Maker</h3>
-            <p>दो लोगों का जॉइंट फोटो बनाएं — Side-by-side couple photo on A4 &amp; 4×6 sheet with zoom and pan.</p>
-          </div>
-          <div class="l-card-btn" style="color:#7c3aed;">
-            <span>Open Joint Maker</span>
-            <span>➔</span>
-          </div>
+	<!-- 5. JOINT PASSPORT PHOTO MAKER -->
+<div id="jointSection" style="display:none;">
+  <div class="card no-print" style="margin-bottom: 20px;">
+    <div class="top-bar">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <button class="home-nav-btn" onclick="switchSuiteSection('landing')">
+          🏠 Return to Home / Hub
+        </button>
+        <div>
+          <h2>👥 Joint Passport Photo Studio</h2>
+          <small>Couple / Two-Person Side-by-Side &bull; Zoom &amp; Pan &bull; A4 &amp; 4×6 Print</small>
         </div>
-
       </div>
+      <div class="usage-badge" style="background:#f5f3ff; border-color:#ddd6fe; color:#6d28d9;">
+        <span>👥 जॉइंट फोटो</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:0; overflow:hidden; background:transparent; border:none; box-shadow:none;">
+    <iframe id="jointFrame"
+            style="width:100%; height:calc(100vh - 200px); min-height:900px; border:0; display:block; background:#eef2f7; border-radius:24px;"
+            title="Joint Passport Photo Maker"></iframe>
+  </div>
+</div>
 
 		
     </section>
