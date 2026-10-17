@@ -1216,7 +1216,6 @@
             <span>Open Farmer ID</span>
             <span>➔</span>
           </div>
-			
         </div>
 
 	<!-- 5. JOINT PASSPORT PHOTO MAKER -->
@@ -1238,7 +1237,13 @@
     </div>
   </div>
 
- 
+  <div class="card" style="padding:0; overflow:hidden; background:transparent; border:none; box-shadow:none;">
+    <iframe id="jointFrame"
+            style="width:100%; height:calc(100vh - 200px); min-height:900px; border:0; display:block; background:#eef2f7; border-radius:24px;"
+            title="Joint Passport Photo Maker"></iframe>
+  </div>
+</div>
+
 		
     </section>
 
@@ -7900,12 +7905,16 @@ ILP_AUTH.submitRegistration = async function () {
   console.log('[iLovePrint] Farmer ID Maker module ready (loads ' + FARMER_HTML_PATH + ').');
 })();
 </script>
+
 <!-- ============================================================
-     iLovePrint ADD-ON v6 — Embedded Joint Photo Maker (No Link Needed)
+     iLovePrint ADD-ON v6 — Joint Photo Maker Controller
      ============================================================ -->
 <script>
 (function () {
   'use strict';
+
+  // File name hosted in the same directory on GitHub
+  const JOINT_HTML_PATH = 'joint-photo.html';
 
   const _origSwitch = window.switchSuiteSection;
   window.switchSuiteSection = function (mode) {
@@ -7927,7 +7936,7 @@ ILP_AUTH.submitRegistration = async function () {
         }
       }
 
-      // Hide other tools
+      // Hide other sections
       ['landingSection','smartIdSection','passportSection','bgaiSection','cropperSection','farmerSection']
         .forEach(function (id) {
           const el = document.getElementById(id);
@@ -7939,8 +7948,7 @@ ILP_AUTH.submitRegistration = async function () {
 
       const iframe = document.getElementById('jointFrame');
       if (iframe && !iframe.dataset.loaded) {
-        // Fallback to direct fetch or direct src
-        iframe.src = './joint-photo.html';
+        iframe.src = JOINT_HTML_PATH;
         iframe.dataset.loaded = '1';
       }
 
@@ -7951,6 +7959,8 @@ ILP_AUTH.submitRegistration = async function () {
     }
     return _origSwitch.apply(this, arguments);
   };
+
+  console.log('[iLovePrint] Joint Photo Maker module ready (loads ' + JOINT_HTML_PATH + ').');
 })();
 </script>
 
