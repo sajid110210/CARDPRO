@@ -1217,34 +1217,22 @@
             <span>➔</span>
           </div>
         </div>
-
-	<!-- 5. JOINT PASSPORT PHOTO MAKER -->
-<div id="jointSection" style="display:none;">
-  <div class="card no-print" style="margin-bottom: 20px;">
-    <div class="top-bar">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <button class="home-nav-btn" onclick="switchSuiteSection('landing')">
-          🏠 Return to Home / Hub
-        </button>
-        <div>
-          <h2>👥 Joint Passport Photo Studio</h2>
-          <small>Couple / Two-Person Side-by-Side &bull; Zoom &amp; Pan &bull; A4 &amp; 4×6 Print</small>
+      
+        <div class="landing-hub-card" onclick="switchSuiteSection('joint')">
+          <div>
+            <div class="l-card-top">
+              <div class="l-card-icon" style="background:#fdf4ff; color:#a21caf;">👨‍👩‍👧</div>
+              <span class="l-badge-pill" style="background:#fae8ff; color:#86198f;">Joint Passport</span>
+            </div>
+            <h3>Joint Passport Photo Maker</h3>
+            <p>Create combined / joint passport-size photos on one sheet. Upload photos, arrange, and print at Ultra 300 DPI.</p>
+          </div>
+          <div class="l-card-btn" style="color:#a21caf;">
+            <span>Open Joint Photo</span>
+            <span>➔</span>
+          </div>
         </div>
-      </div>
-      <div class="usage-badge" style="background:#f5f3ff; border-color:#ddd6fe; color:#6d28d9;">
-        <span>👥 जॉइंट फोटो</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="card" style="padding:0; overflow:hidden; background:transparent; border:none; box-shadow:none;">
-    <iframe id="jointFrame"
-            style="width:100%; height:calc(100vh - 200px); min-height:900px; border:0; display:block; background:#eef2f7; border-radius:24px;"
-            title="Joint Passport Photo Maker"></iframe>
-  </div>
 </div>
-
-		
     </section>
 
     <!-- MODULE: AUTOCROPPER PRO -->
@@ -1909,7 +1897,16 @@
           </div>
         </div>
       </div>
-	<!-- 5. JOINT PASSPORT PHOTO MAKER -->
+
+      <div class="card" style="padding:0; overflow:hidden; background:transparent; border:none; box-shadow:none;">
+        <iframe id="farmerFrame"
+                style="width:100%; height:calc(100vh - 200px); min-height:900px; border:0; display:block; background:#eef2f7; border-radius:24px;"
+                title="Farmer ID Maker"></iframe>
+      </div>
+    </div>
+
+    
+    <!-- 5. JOINT PASSPORT PHOTO MAKER -->
     <div id="jointSection" style="display:none;">
       <div class="card no-print" style="margin-bottom: 20px;">
         <div class="top-bar">
@@ -1918,12 +1915,12 @@
               🏠 Return to Home / Hub
             </button>
             <div>
-              <h2>👥 Joint Passport Photo Studio</h2>
-              <small>Couple / Two-Person Side-by-Side &bull; Zoom &amp; Pan &bull; A4 &amp; 4×6 Print</small>
+              <h2>👨‍👩‍👧 Joint Passport Photo Maker</h2>
+              <small>Combined / Family Passport Photos · Ultra 300 DPI Print Ready</small>
             </div>
           </div>
-          <div class="usage-badge" style="background:#f5f3ff; border-color:#ddd6fe; color:#6d28d9;">
-            <span>👥 जॉइंट फोटो</span>
+          <div class="usage-badge">
+            <span>📸 Joint Passport Studio</span>
           </div>
         </div>
       </div>
@@ -1935,14 +1932,7 @@
       </div>
     </div>
 
-      <div class="card" style="padding:0; overflow:hidden; background:transparent; border:none; box-shadow:none;">
-        <iframe id="farmerFrame"
-                style="width:100%; height:calc(100vh - 200px); min-height:900px; border:0; display:block; background:#eef2f7; border-radius:24px;"
-                title="Farmer ID Maker"></iframe>
-      </div>
-    </div>
-
-    <!-- MIDDLE ADSENSE UNIT -->
+<!-- MIDDLE ADSENSE UNIT -->
     <div class="adsense-container no-print">
       <span class="ad-label">Advertisement</span>
       <ins class="adsbygoogle"
@@ -7847,122 +7837,95 @@ ILP_AUTH.submitRegistration = async function () {
 
 
 <!-- ============================================================
-     iLovePrint ADD-ON v5 — Farmer ID Maker controller
-     Loads the farmer HTML from an external file inside an iframe.
+     iLovePrint ADD-ON v5 — External HTML Modules (Farmer + Joint Photo)
+     Loads external HTML files into iframes. Place files next to this page
+     on GitHub Pages / hosting (e.g. joint-photo.html, farmer-id-maker.html).
      ============================================================ -->
 <script>
 (function () {
   'use strict';
 
-  /* Path to the Farmer ID Maker file — it must sit next to dev6.html
-     on your GitHub Pages site (or wherever you host these files). */
-  const FARMER_HTML_PATH = 'farmer-id-maker.html';
+  const MODULES = {
+    farmer: {
+      path: 'farmer-id-maker.html',
+      sectionId: 'farmerSection',
+      frameId: 'farmerFrame',
+      bodyClass: 'mode-farmer'
+    },
+    joint: {
+      path: 'joint-photo.html',
+      sectionId: 'jointSection',
+      frameId: 'jointFrame',
+      bodyClass: 'mode-joint'
+    }
+  };
+
+  const EXTERNAL_SECTION_IDS = Object.values(MODULES).map(m => m.sectionId);
+
+  function hideExternalSections() {
+    EXTERNAL_SECTION_IDS.forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+  }
+
+  function requireAuth() {
+    const acc     = JSON.parse(localStorage.getItem('iloveprint_account') || 'null');
+    const adminIn = sessionStorage.getItem('iloveprint_admin_session') === '1';
+    if (adminIn) return true;
+    if (!acc) { window.ILP_AUTH.showRegistration(); return false; }
+    if (acc.status !== 'approved') {
+      if (acc.status === 'pending_payment') window.ILP_AUTH.showPaymentModal();
+      else window.ILP_AUTH.showPending();
+      return false;
+    }
+    if (acc.expiryDate && Date.now() > acc.expiryDate) {
+      window.ILP_AUTH.showExpired();
+      return false;
+    }
+    return true;
+  }
+
+  function openExternalModule(mode) {
+    const cfg = MODULES[mode];
+    if (!cfg) return false;
+    if (!requireAuth()) return true; // handled (blocked)
+
+    ['landingSection','smartIdSection','passportSection','bgaiSection','cropperSection','dynamicModuleSection']
+      .forEach(function (id) {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+    hideExternalSections();
+
+    const tg = document.getElementById('topGuideBar'); if (tg) tg.style.display = 'none';
+    const hb = document.getElementById('topHubReturnBtn'); if (hb) hb.style.display = 'inline-flex';
+
+    const iframe = document.getElementById(cfg.frameId);
+    if (iframe && !iframe.dataset.loaded) {
+      iframe.src = cfg.path;
+      iframe.dataset.loaded = '1';
+    }
+
+    const section = document.getElementById(cfg.sectionId);
+    if (section) section.style.display = 'block';
+    document.body.className = cfg.bodyClass;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return true;
+  }
 
   const _origSwitch = window.switchSuiteSection;
   window.switchSuiteSection = function (mode) {
-    const farmerSec = document.getElementById('farmerSection');
-    if (farmerSec) farmerSec.style.display = 'none';
-
-    if (mode === 'farmer') {
-      const acc     = JSON.parse(localStorage.getItem('iloveprint_account') || 'null');
-      const adminIn = sessionStorage.getItem('iloveprint_admin_session') === '1';
-      if (!adminIn) {
-        if (!acc) { window.ILP_AUTH.showRegistration(); return; }
-        if (acc.status !== 'approved') {
-          if (acc.status === 'pending_payment') window.ILP_AUTH.showPaymentModal();
-          else                                  window.ILP_AUTH.showPending();
-          return;
-        }
-        if (acc.expiryDate && Date.now() > acc.expiryDate) {
-          window.ILP_AUTH.showExpired(); return;
-        }
-      }
-
-      ['landingSection','smartIdSection','passportSection','bgaiSection','cropperSection']
-        .forEach(function (id) {
-          const el = document.getElementById(id);
-          if (el) el.style.display = 'none';
-        });
-
-      const tg = document.getElementById('topGuideBar'); if (tg) tg.style.display = 'none';
-      const hb = document.getElementById('topHubReturnBtn'); if (hb) hb.style.display = 'inline-flex';
-
-      const iframe = document.getElementById('farmerFrame');
-      if (iframe && !iframe.dataset.loaded) {
-        /* Load the file over HTTP — no textarea, no inline HTML, no leaks. */
-        iframe.src = FARMER_HTML_PATH;
-        iframe.dataset.loaded = '1';
-      }
-
-      if (farmerSec) farmerSec.style.display = 'block';
-      document.body.className = 'mode-farmer';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    hideExternalSections();
+    if (MODULES[mode]) {
+      openExternalModule(mode);
       return;
     }
     return _origSwitch.apply(this, arguments);
   };
 
-  console.log('[iLovePrint] Farmer ID Maker module ready (loads ' + FARMER_HTML_PATH + ').');
+  console.log('[iLovePrint] External modules ready:', Object.keys(MODULES).join(', '));
 })();
 </script>
-
-<!-- ============================================================
-     iLovePrint ADD-ON v6 — Joint Photo Maker Controller
-     ============================================================ -->
-<script>
-(function () {
-  'use strict';
-
-  // File name hosted in the same directory on GitHub
-  const JOINT_HTML_PATH = 'joint-photo.html';
-
-  const _origSwitch = window.switchSuiteSection;
-  window.switchSuiteSection = function (mode) {
-    const jointSec = document.getElementById('jointSection');
-    if (jointSec) jointSec.style.display = 'none';
-
-    if (mode === 'joint') {
-      const acc     = JSON.parse(localStorage.getItem('iloveprint_account') || 'null');
-      const adminIn = sessionStorage.getItem('iloveprint_admin_session') === '1';
-      if (!adminIn) {
-        if (!acc) { window.ILP_AUTH.showRegistration(); return; }
-        if (acc.status !== 'approved') {
-          if (acc.status === 'pending_payment') window.ILP_AUTH.showPaymentModal();
-          else                                  window.ILP_AUTH.showPending();
-          return;
-        }
-        if (acc.expiryDate && Date.now() > acc.expiryDate) {
-          window.ILP_AUTH.showExpired(); return;
-        }
-      }
-
-      // Hide other sections
-      ['landingSection','smartIdSection','passportSection','bgaiSection','cropperSection','farmerSection']
-        .forEach(function (id) {
-          const el = document.getElementById(id);
-          if (el) el.style.display = 'none';
-        });
-
-      const tg = document.getElementById('topGuideBar'); if (tg) tg.style.display = 'none';
-      const hb = document.getElementById('topHubReturnBtn'); if (hb) hb.style.display = 'inline-flex';
-
-      const iframe = document.getElementById('jointFrame');
-      if (iframe && !iframe.dataset.loaded) {
-        iframe.src = JOINT_HTML_PATH;
-        iframe.dataset.loaded = '1';
-      }
-
-      if (jointSec) jointSec.style.display = 'block';
-      document.body.className = 'mode-joint';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-    return _origSwitch.apply(this, arguments);
-  };
-
-  console.log('[iLovePrint] Joint Photo Maker module ready (loads ' + JOINT_HTML_PATH + ').');
-})();
-</script>
-
 </body>
 </html>
