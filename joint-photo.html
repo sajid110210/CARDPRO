@@ -21,49 +21,85 @@
       --paper-h: 297mm;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-    body { background: #f1f5f9; color: #0f172a; min-height: 100vh; padding: 24px 16px 60px; }
+    body {
+      background: #f1f5f9; color: #0f172a; min-height: 100vh;
+      padding: 12px 12px 40px;
+    }
+
     .header {
-      max-width: 1180px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      max-width: 1280px; margin: 0 auto 12px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
     }
     .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
-    .logo-badge { background: linear-gradient(135deg, #7c3aed, #2563eb); color: #fff; font-weight: 800; padding: 6px 12px; border-radius: 12px; font-size: 16px; }
-    .logo h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+    .logo-badge {
+      background: linear-gradient(135deg, #7c3aed, #2563eb); color: #fff;
+      font-weight: 800; padding: 6px 12px; border-radius: 12px; font-size: 15px;
+    }
+    .logo h1 { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
     .logo h1 span { color: #7c3aed; }
-    .badge { background: #f3e8ff; color: #6b21a8; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid #e9d5ff; }
+    .badge {
+      background: #f3e8ff; color: #6b21a8; font-size: 11px; font-weight: 700;
+      padding: 4px 12px; border-radius: 20px; border: 1px solid #e9d5ff;
+    }
 
-    .app { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 340px 1fr; gap: 20px; }
-    @media (max-width: 900px) { .app { grid-template-columns: 1fr; } }
+    /* Dual-pane: controls | live preview — both visible, no page jump */
+    .app {
+      max-width: 1280px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(300px, 340px) 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar, .preview-col { position: static !important; max-height: none !important; }
+    }
+
+    .sidebar {
+      position: sticky; top: 10px;
+      max-height: calc(100vh - 24px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 2px;
+      scrollbar-width: thin;
+    }
+    .sidebar::-webkit-scrollbar { width: 5px; }
+    .sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
     .card {
-      background: #fff; border-radius: 20px; padding: 18px 20px; border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      background: #fff; border-radius: 16px; padding: 14px 14px 16px;
+      border: 1px solid #e2e8f0; box-shadow: 0 4px 16px rgba(0,0,0,0.04);
     }
-    .card h2 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: #475569; margin-bottom: 12px; margin-top: 4px; }
+    .card h2 {
+      font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+      color: #64748b; margin: 12px 0 8px;
+    }
     .card h2:first-child { margin-top: 0; }
 
-    .preset-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .preset-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 4px; }
     .preset-btn {
-      padding: 10px 8px; font-size: 12px; font-weight: 800; border-radius: 12px;
+      padding: 8px 6px; font-size: 12px; font-weight: 800; border-radius: 10px;
       border: 1.5px solid #cbd5e1; background: #f8fafc; color: #334155; cursor: pointer;
-      text-align: center; transition: 0.2s; display: flex; flex-direction: column; gap: 2px;
+      text-align: center; transition: 0.15s; display: flex; flex-direction: column; gap: 1px;
     }
     .preset-btn:hover { background: #f5f3ff; border-color: #7c3aed; }
     .preset-btn.active {
       background: linear-gradient(135deg, #6d28d9, #2563eb); color: #fff; border-color: #5b21b6;
-      box-shadow: 0 4px 12px rgba(109, 40, 217, 0.3);
+      box-shadow: 0 3px 10px rgba(109, 40, 217, 0.28);
     }
-    .preset-btn small { font-size: 10px; opacity: 0.85; font-weight: 500; }
+    .preset-btn small { font-size: 9.5px; opacity: 0.85; font-weight: 500; }
 
-    .upload-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .upload-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
     .drop {
-      border: 2px dashed #c4b5fd; border-radius: 14px; padding: 14px 8px; text-align: center;
-      cursor: pointer; background: linear-gradient(180deg, #faf5ff, #f5f3ff); transition: 0.2s; min-height: 110px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; position: relative; overflow: hidden;
+      border: 2px dashed #c4b5fd; border-radius: 12px; padding: 10px 6px; text-align: center;
+      cursor: pointer; background: linear-gradient(180deg, #faf5ff, #f5f3ff); transition: 0.15s;
+      min-height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 3px; position: relative; overflow: hidden;
     }
     .drop:hover, .drop.over { border-color: #7c3aed; background: #f3e8ff; }
-    .drop .ic { font-size: 24px; }
-    .drop b { font-size: 11.5px; color: #4c1d95; }
-    .drop small { font-size: 10px; color: #64748b; }
+    .drop .ic { font-size: 22px; }
+    .drop b { font-size: 11px; color: #4c1d95; }
+    .drop small { font-size: 9.5px; color: #64748b; }
     .drop img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .drop .clear-btn {
       position: absolute; top: 4px; right: 4px; background: #ef4444; color: #fff; border: none;
@@ -72,27 +108,30 @@
     .drop.has-img .clear-btn { display: block; }
     .drop.has-img .ic, .drop.has-img b, .drop.has-img small { display: none; }
 
-    /* Per-person adjust panel */
     .adjust-panel {
-      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 12px; margin-bottom: 10px;
+      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px 10px; margin-bottom: 8px;
     }
     .adjust-panel .ap-title {
-      font-size: 11px; font-weight: 800; color: #6d28d9; text-transform: uppercase; letter-spacing: 0.03em;
-      margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;
+      font-size: 10.5px; font-weight: 800; color: #6d28d9; text-transform: uppercase; letter-spacing: 0.03em;
+      margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;
     }
-    .adjust-panel .ap-title span { font-size: 10px; color: #94a3b8; font-weight: 600; text-transform: none; }
+    .adjust-panel .ap-title span { font-size: 9.5px; color: #94a3b8; font-weight: 600; text-transform: none; }
     .slider-row {
-      display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 11px; color: #475569; font-weight: 600;
+      display: flex; align-items: center; gap: 5px; margin-bottom: 4px;
+      font-size: 11px; color: #475569; font-weight: 600;
     }
-    .slider-row label { width: 42px; flex-shrink: 0; }
+    .slider-row label { width: 38px; flex-shrink: 0; }
     .slider-row input[type="range"] { flex: 1; height: 4px; accent-color: #7c3aed; }
-    .slider-row .val { width: 36px; text-align: right; font-variant-numeric: tabular-nums; color: #7c3aed; font-weight: 800; font-size: 11px; }
+    .slider-row .val {
+      width: 34px; text-align: right; font-variant-numeric: tabular-nums;
+      color: #7c3aed; font-weight: 800; font-size: 10.5px;
+    }
     .pan-grid {
-      display: grid; grid-template-columns: 28px 1fr 28px; grid-template-rows: 28px 1fr 28px; gap: 2px;
-      width: 100%; max-width: 120px; margin: 6px auto 0; aspect-ratio: 1;
+      display: grid; grid-template-columns: 26px 1fr 26px; grid-template-rows: 26px 1fr 26px; gap: 2px;
+      width: 100%; max-width: 110px; margin: 4px auto 0; aspect-ratio: 1;
     }
     .pan-grid .pan-btn {
-      background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 800;
+      background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800;
       color: #334155; display: flex; align-items: center; justify-content: center; transition: 0.12s;
     }
     .pan-grid .pan-btn:hover { background: #7c3aed; color: #fff; }
@@ -101,30 +140,80 @@
       display: flex; align-items: center; justify-content: center; font-size: 9px; color: #94a3b8; font-weight: 700;
     }
 
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-    .form-row label, .full-label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; }
-    .form-row input, .form-row select {
-      width: 100%; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px;
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+    .form-row label, .full-label {
+      display: block; font-size: 10px; font-weight: 700; color: #64748b;
+      margin-bottom: 3px; text-transform: uppercase;
     }
-    .chk-row { display: flex; align-items: center; gap: 8px; margin: 8px 0; font-size: 13px; font-weight: 600; color: #334155; }
-    .chk-row input { width: 16px; height: 16px; accent-color: #7c3aed; }
+    .form-row input, .form-row select {
+      width: 100%; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12.5px;
+    }
+    .chk-row {
+      display: flex; align-items: center; gap: 7px; margin: 6px 0;
+      font-size: 12.5px; font-weight: 600; color: #334155;
+    }
+    .chk-row input { width: 15px; height: 15px; accent-color: #7c3aed; }
 
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 10px 18px; border: none; border-radius: 40px; font-weight: 700; font-size: 13px; cursor: pointer;
-      transition: 0.15s; width: 100%;
+      padding: 9px 14px; border: none; border-radius: 40px; font-weight: 700; font-size: 12.5px;
+      cursor: pointer; transition: 0.15s; width: 100%;
     }
     .btn-primary { background: linear-gradient(135deg, #7c3aed, #2563eb); color: #fff; }
-    .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
-    .btn-accent { background: #0f766e; color: #fff; margin-top: 8px; }
+    .btn-primary:hover { filter: brightness(1.08); }
+    .btn-accent { background: #0f766e; color: #fff; margin-top: 6px; }
     .btn-accent:hover { background: #0d9488; }
-    .btn-ghost { background: #e2e8f0; color: #334155; margin-top: 6px; font-size: 12px; padding: 7px; }
+    .btn-ghost { background: #e2e8f0; color: #334155; margin-top: 4px; font-size: 11.5px; padding: 6px; }
     .btn-ghost:hover { background: #cbd5e1; }
-    .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
+    .hint { font-size: 11px; color: #64748b; margin-top: 8px; line-height: 1.4; }
+    .hint b { color: #4c1d95; }
+
+    /* Preview column — sticky so it stays in view while adjusting */
+    .preview-col {
+      position: sticky; top: 10px;
+      display: flex; flex-direction: column; gap: 12px;
+      max-height: calc(100vh - 24px);
+      overflow-y: auto;
+    }
+
+    .live-card {
+      background: #fff; border-radius: 16px; padding: 12px 14px;
+      border: 1px solid #e2e8f0; box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+    .live-card .live-title {
+      font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+      color: #64748b; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .live-card .live-title .live-tag {
+      background: #dcfce7; color: #166534; font-size: 10px; font-weight: 800;
+      padding: 2px 8px; border-radius: 20px;
+    }
+    .live-frame-wrap {
+      display: flex; justify-content: center; align-items: center;
+      background: #0f172a; border-radius: 12px; padding: 16px; min-height: 160px;
+    }
+    #liveCanvas {
+      max-width: 100%; height: auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      border-radius: 2px; background: #fff;
+    }
+    .live-empty {
+      color: #94a3b8; font-size: 13px; text-align: center; padding: 28px 12px; line-height: 1.5;
+    }
+
+    .sheet-card {
+      background: #334155; border-radius: 16px; padding: 14px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .sheet-card .sheet-title {
+      font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+      color: #cbd5e1; display: flex; align-items: center; justify-content: space-between;
+    }
     .preview-wrap {
-      background: #334155; border-radius: 20px; padding: 20px; display: flex; justify-content: center;
-      overflow: auto; min-height: 480px;
+      display: flex; justify-content: center; overflow: auto;
+      background: #1e293b; border-radius: 10px; padding: 12px;
     }
     .paper-sheet {
       width: var(--paper-w); min-height: var(--paper-h); background: #fff;
@@ -134,8 +223,9 @@
       grid-auto-rows: var(--photo-h);
       gap: var(--gap);
       align-content: start; justify-content: start;
-      box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.35);
       box-sizing: border-box;
+      transform-origin: top center;
     }
     .joint-item {
       width: var(--photo-w); height: var(--photo-h);
@@ -145,9 +235,6 @@
     }
     .joint-item canvas { width: 100%; height: 100%; display: block; }
 
-    .hint { font-size: 11.5px; color: #64748b; margin-top: 10px; line-height: 1.45; }
-    .hint b { color: #4c1d95; }
-
     @media print {
       @page { size: var(--paper-w) var(--paper-h); margin: 0 !important; }
       html, body {
@@ -155,14 +242,15 @@
         width: var(--paper-w) !important; height: var(--paper-h) !important; overflow: hidden !important;
         -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
       }
-      .no-print, .header, .sidebar { display: none !important; }
+      .no-print, .header, .sidebar, .live-card, .sheet-title { display: none !important; }
       .app { display: block !important; max-width: none !important; margin: 0 !important; }
+      .preview-col { position: static !important; max-height: none !important; overflow: visible !important; }
+      .sheet-card { background: transparent !important; padding: 0 !important; border-radius: 0 !important; }
       .preview-wrap {
-        background: transparent !important; padding: 0 !important; margin: 0 !important;
-        min-height: 0 !important; overflow: hidden !important;
+        background: transparent !important; padding: 0 !important; margin: 0 !important; overflow: hidden !important;
       }
       .paper-sheet {
-        box-shadow: none !important; margin: 0 !important;
+        box-shadow: none !important; margin: 0 !important; transform: none !important;
         width: var(--paper-w) !important; height: var(--paper-h) !important; min-height: 0 !important;
         max-height: var(--paper-h) !important; overflow: hidden !important;
         page-break-after: avoid !important; page-break-inside: avoid !important;
@@ -177,10 +265,11 @@
       <span class="logo-badge">JP</span>
       <h1>Joint <span>Passport</span> Photo</h1>
     </a>
-    <span class="badge">Couple / Two-Person · Zoom &amp; Pan · A4 / 4×6</span>
+    <span class="badge">Live Preview · Zoom &amp; Pan · A4 / 4×6</span>
   </div>
 
   <div class="app">
+    <!-- LEFT: controls (sticky, independent scroll) -->
     <div class="sidebar no-print">
       <div class="card">
         <h2>Paper Preset</h2>
@@ -195,25 +284,24 @@
           </button>
         </div>
 
-        <h2>1. Upload Two Photos</h2>
+        <h2>1. Upload Photos</h2>
         <div class="upload-pair">
           <div class="drop" id="drop1" data-slot="1">
             <span class="ic">👤</span>
             <b>Person 1 (Left)</b>
-            <small>Click or drop</small>
+            <small>Click / drop</small>
             <button type="button" class="clear-btn" title="Remove">×</button>
           </div>
           <div class="drop" id="drop2" data-slot="2">
             <span class="ic">👤</span>
             <b>Person 2 (Right)</b>
-            <small>Click or drop</small>
+            <small>Click / drop</small>
             <button type="button" class="clear-btn" title="Remove">×</button>
           </div>
         </div>
         <input type="file" id="file1" accept="image/*" hidden>
         <input type="file" id="file2" accept="image/*" hidden>
 
-        <!-- Person 1 adjust -->
         <div class="adjust-panel" id="adj1" style="display:none;">
           <div class="ap-title">Person 1 (Left) <span>zoom · pan</span></div>
           <div class="slider-row">
@@ -242,10 +330,9 @@
             <button type="button" class="pan-btn" data-p="1" data-dx="0" data-dy="5">▼</button>
             <div></div>
           </div>
-          <button type="button" class="btn btn-ghost" id="reset1" style="margin-top:8px;">Reset Person 1</button>
+          <button type="button" class="btn btn-ghost" id="reset1">Reset Person 1</button>
         </div>
 
-        <!-- Person 2 adjust -->
         <div class="adjust-panel" id="adj2" style="display:none;">
           <div class="ap-title">Person 2 (Right) <span>zoom · pan</span></div>
           <div class="slider-row">
@@ -274,7 +361,7 @@
             <button type="button" class="pan-btn" data-p="2" data-dx="0" data-dy="5">▼</button>
             <div></div>
           </div>
-          <button type="button" class="btn btn-ghost" id="reset2" style="margin-top:8px;">Reset Person 2</button>
+          <button type="button" class="btn btn-ghost" id="reset2">Reset Person 2</button>
         </div>
 
         <h2>2. Joint Frame Size</h2>
@@ -332,7 +419,7 @@
           </div>
           <div>
             <label>Color</label>
-            <input type="color" id="borderC" value="#000000" style="height:34px;padding:2px;">
+            <input type="color" id="borderC" value="#000000" style="height:32px;padding:2px;">
           </div>
         </div>
 
@@ -341,19 +428,37 @@
           <label for="swapOrder">Swap left / right</label>
         </div>
 
-        <button type="button" class="btn btn-primary" id="btnRender" disabled>🔄 Update Sheet</button>
         <button type="button" class="btn btn-accent" id="btnPrint" disabled>🖨️ Print Sheet</button>
 
         <p class="hint">
-          Each frame is a <b>side-by-side joint photo</b> (Person 1 | Person 2).
-          Use <b>Zoom</b> and <b>Pan</b> (arrows or X/Y sliders) to position each face.
-          Default size: <b>6 × 3.5 cm</b>. A4 = 3 copies · 4×6 = 4 copies.
+          Adjust <b>Zoom</b> &amp; <b>Pan</b> — live preview updates instantly on the right.
+          Default frame: <b>6 × 3.5 cm</b>.
         </p>
       </div>
     </div>
 
-    <div class="preview-wrap">
-      <div class="paper-sheet" id="sheet"></div>
+    <!-- RIGHT: live single-frame + full sheet (sticky) -->
+    <div class="preview-col">
+      <div class="live-card no-print">
+        <div class="live-title">
+          <span>Live Joint Preview</span>
+          <span class="live-tag" id="liveStatus">Waiting for photos</span>
+        </div>
+        <div class="live-frame-wrap">
+          <canvas id="liveCanvas" style="display:none;"></canvas>
+          <div class="live-empty" id="liveEmpty">Upload both photos to see<br>the joint frame live here.</div>
+        </div>
+      </div>
+
+      <div class="sheet-card">
+        <div class="sheet-title no-print">
+          <span>Print Sheet</span>
+          <span id="sheetMeta" style="font-weight:600;color:#94a3b8;font-size:10.5px;">A4 · 0 copies</span>
+        </div>
+        <div class="preview-wrap">
+          <div class="paper-sheet" id="sheet"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -361,14 +466,22 @@
 (function () {
   'use strict';
 
-  /* state for each person: image + transform */
   const p1 = { el: null, url: null, zoom: 100, panX: 0, panY: 0 };
   const p2 = { el: null, url: null, zoom: 100, panX: 0, panY: 0 };
-
   let currentPreset = 'a4';
+  let renderTimer = null;
 
   const $ = id => document.getElementById(id);
   const sheet = $('sheet');
+  const liveCanvas = $('liveCanvas');
+
+  function scheduleRender() {
+    if (renderTimer) cancelAnimationFrame(renderTimer);
+    renderTimer = requestAnimationFrame(() => {
+      renderTimer = null;
+      renderAll();
+    });
+  }
 
   function loadFile(file, slot) {
     if (!file || !file.type.startsWith('image/')) return;
@@ -393,7 +506,7 @@
       preview.src = url;
       $('adj' + slot).style.display = 'block';
       updateButtons();
-      renderSheet();
+      scheduleRender();
     };
     img.src = url;
   }
@@ -413,7 +526,7 @@
     $('adj' + slot).style.display = 'none';
     syncSliders(slot);
     updateButtons();
-    renderSheet();
+    scheduleRender();
   }
 
   function syncSliders(slot) {
@@ -428,8 +541,17 @@
 
   function updateButtons() {
     const ready = !!(p1.el && p2.el);
-    $('btnRender').disabled = !ready;
     $('btnPrint').disabled = !ready;
+    const st = $('liveStatus');
+    if (ready) {
+      st.textContent = 'Live';
+      st.style.background = '#dcfce7';
+      st.style.color = '#166534';
+    } else {
+      st.textContent = 'Waiting for photos';
+      st.style.background = '#fef3c7';
+      st.style.color = '#92400e';
+    }
   }
 
   function applyVars() {
@@ -463,18 +585,12 @@
     }
   }
 
-  /**
-   * Draw one half of the joint frame with zoom + pan.
-   * zoom 100 = cover (fill half). >100 zooms in, <100 zooms out.
-   * panX/panY in percent of the half width/height (-80..80).
-   */
   function drawHalf(ctx, img, x, y, dw, dh, zoom, panX, panY) {
     if (!img) return;
     const z = Math.max(0.5, (zoom || 100) / 100);
     const ir = img.naturalWidth / img.naturalHeight;
     const tr = dw / dh;
 
-    // base "cover" crop
     let sw, sh, sx, sy;
     if (ir > tr) {
       sh = img.naturalHeight;
@@ -488,27 +604,22 @@
       sy = (img.naturalHeight - sh) / 2;
     }
 
-    // apply zoom (scale crop window around center)
     const csw = sw / z;
     const csh = sh / z;
     let csx = sx + (sw - csw) / 2;
     let csy = sy + (sh - csh) / 2;
-
-    // pan: shift crop window
     csx += (panX || 0) / 100 * csw;
     csy += (panY || 0) / 100 * csh;
-
-    // clamp so we stay inside the image
     csx = Math.max(0, Math.min(img.naturalWidth - csw, csx));
     csy = Math.max(0, Math.min(img.naturalHeight - csh, csy));
 
     ctx.drawImage(img, csx, csy, csw, csh, x, y, dw, dh);
   }
 
-  function drawJoint(canvas, leftState, rightState) {
+  function drawJoint(canvas, leftState, rightState, forScreen) {
     const wCm = parseFloat($('wCm').value) || 6;
     const hCm = parseFloat($('hCm').value) || 3.5;
-    const dpi = 300;
+    const dpi = forScreen ? 150 : 300;
     const pxW = Math.round(wCm / 2.54 * dpi);
     const pxH = Math.round(hCm / 2.54 * dpi);
     canvas.width = pxW;
@@ -518,20 +629,41 @@
     ctx.fillRect(0, 0, pxW, pxH);
 
     const half = Math.floor(pxW / 2);
-
     drawHalf(ctx, leftState.el, 0, 0, half, pxH, leftState.zoom, leftState.panX, leftState.panY);
     drawHalf(ctx, rightState.el, half, 0, pxW - half, pxH, rightState.zoom, rightState.panX, rightState.panY);
+
+    if ($('borderOn').checked) {
+      const bw = parseInt($('borderW').value, 10) || 1;
+      ctx.strokeStyle = $('borderC').value || '#000';
+      ctx.lineWidth = bw;
+      ctx.strokeRect(bw / 2, bw / 2, pxW - bw, pxH - bw);
+    }
   }
 
-  function renderSheet() {
+  function renderAll() {
     applyVars();
-    sheet.innerHTML = '';
-    if (!p1.el || !p2.el) return;
-
     const swap = $('swapOrder').checked;
     const left = swap ? p2 : p1;
     const right = swap ? p1 : p2;
+    const ready = !!(p1.el && p2.el);
+
+    // Live single-frame preview (always visible while editing)
+    if (ready) {
+      liveCanvas.style.display = 'block';
+      $('liveEmpty').style.display = 'none';
+      drawJoint(liveCanvas, left, right, true);
+    } else {
+      liveCanvas.style.display = 'none';
+      $('liveEmpty').style.display = 'block';
+    }
+
+    // Full print sheet
+    sheet.innerHTML = '';
     const qty = Math.max(1, parseInt($('qty').value, 10) || 3);
+    $('sheetMeta').textContent =
+      (currentPreset === '4x6' ? '4×6' : 'A4') + ' · ' + (ready ? qty : 0) + ' copies';
+
+    if (!ready) return;
 
     for (let i = 0; i < qty; i++) {
       const item = document.createElement('div');
@@ -539,7 +671,7 @@
       const canvas = document.createElement('canvas');
       item.appendChild(canvas);
       sheet.appendChild(item);
-      drawJoint(canvas, left, right);
+      drawJoint(canvas, left, right, false);
     }
   }
 
@@ -567,11 +699,9 @@
       $('marginT').value = '4';
       $('marginB').value = '4';
     }
-    applyVars();
-    if (p1.el && p2.el) renderSheet();
+    scheduleRender();
   }
 
-  // Drop zones
   [1, 2].forEach(slot => {
     const drop = $('drop' + slot);
     const file = $('file' + slot);
@@ -596,7 +726,6 @@
     });
   });
 
-  // Zoom / pan sliders
   function bindTransform(slot) {
     const t = slot === 1 ? p1 : p2;
     const zEl = $('z' + slot), xEl = $('x' + slot), yEl = $('y' + slot);
@@ -607,7 +736,7 @@
       $('z' + slot + 'v').textContent = t.zoom + '%';
       $('x' + slot + 'v').textContent = t.panX;
       $('y' + slot + 'v').textContent = t.panY;
-      if (p1.el && p2.el) renderSheet();
+      scheduleRender();
     };
     zEl.addEventListener('input', onChange);
     xEl.addEventListener('input', onChange);
@@ -616,7 +745,6 @@
   bindTransform(1);
   bindTransform(2);
 
-  // Arrow pan buttons
   document.querySelectorAll('.pan-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const slot = +btn.dataset.p;
@@ -624,46 +752,43 @@
       t.panX = Math.max(-80, Math.min(80, t.panX + (+btn.dataset.dx)));
       t.panY = Math.max(-80, Math.min(80, t.panY + (+btn.dataset.dy)));
       syncSliders(slot);
-      if (p1.el && p2.el) renderSheet();
+      scheduleRender();
     });
   });
 
   $('reset1').addEventListener('click', () => {
     p1.zoom = 100; p1.panX = 0; p1.panY = 0;
     syncSliders(1);
-    if (p1.el && p2.el) renderSheet();
+    scheduleRender();
   });
   $('reset2').addEventListener('click', () => {
     p2.zoom = 100; p2.panX = 0; p2.panY = 0;
     syncSliders(2);
-    if (p1.el && p2.el) renderSheet();
+    scheduleRender();
   });
 
-  // Presets
   $('presetA4').addEventListener('click', () => applyPreset('a4'));
   $('preset4x6').addEventListener('click', () => applyPreset('4x6'));
 
-  // Other controls
   ['wCm','hCm','qty','cols','gapMm','marginLR','marginT','marginB','borderOn','borderW','borderC','swapOrder']
     .forEach(id => {
       const el = $(id);
-      el.addEventListener('input', () => { applyVars(); if (p1.el && p2.el) renderSheet(); });
-      el.addEventListener('change', () => { applyVars(); if (p1.el && p2.el) renderSheet(); });
+      el.addEventListener('input', scheduleRender);
+      el.addEventListener('change', scheduleRender);
     });
 
   $('borderOn').addEventListener('change', () => {
     $('borderRow').style.opacity = $('borderOn').checked ? '1' : '0.4';
   });
 
-  $('btnRender').addEventListener('click', renderSheet);
   $('btnPrint').addEventListener('click', () => {
     if (!p1.el || !p2.el) return;
-    renderSheet();
-    setTimeout(() => window.print(), 250);
+    renderAll();
+    setTimeout(() => window.print(), 200);
   });
 
-  // Init
   applyPreset('a4');
+  updateButtons();
 })();
   </script>
 </body>
