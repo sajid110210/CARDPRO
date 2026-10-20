@@ -5918,13 +5918,14 @@
   'use strict';
 
   /* ---------- CONFIG ---------- */
+  /* ---------- CONFIG ---------- */
   const DEFAULTS = {
-    amount: 50,
+    amount: 100,
     planDays: 30,
     upiId: (window.ILP_SECRET && ILP_SECRET.upi) ? ILP_SECRET.upi() : '',
     payee: 'iLovePrint',
     qrUrl: '',
-    sheetUrl: ''
+    sheetUrl: 'https://script.google.com/macros/s/AKfycbwAlZm5k-4ZEZTAE8n23TStohTJg9uMr9AZL9DBvaUSQr-aiUTzdxuqiSvZoxrfx3BF/exec'
   };
   /* Admin username pulled from obfuscated secret.
      Admin password is never stored in plaintext — only its SHA-256 hash. */
@@ -7362,8 +7363,8 @@ function json(obj) {
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   };
 
-  function cfg() {
-    return Object.assign({ amount: 50, planDays: 30, sheetUrl: '' }, LS.get(SET_KEY, {}));
+ function cfg() {
+    return Object.assign({ amount: 100, planDays: 30, sheetUrl: 'https://script.google.com/macros/s/AKfycbwAlZm5k-4ZEZTAE8n23TStohTJg9uMr9AZL9DBvaUSQr-aiUTzdxuqiSvZoxrfx3BF/exec' }, LS.get(SET_KEY, {}));
   }
 
   function cloudUrl() {
@@ -8183,12 +8184,9 @@ ILP_AUTH.submitRegistration = async function () {
       const acc = ILP_AUTH.getAccount();
       if (!acc) return ILP_AUTH.showRegistration();
 
-      const cloudUrl = (window.ILP_SETTINGS && window.ILP_SETTINGS.sheetUrl()) ? window.ILP_SETTINGS.sheetUrl() : (typeof GOOGLE_SHEET_API_URL !== 'undefined' ? GOOGLE_SHEET_API_URL : '');
-      if (!cloudUrl) {
-        alert("Google Apps Script URL is missing in Settings.");
-        return;
-      }
-
+     const cloudUrl = (window.ILP_SETTINGS && typeof window.ILP_SETTINGS.sheetUrl === 'function' && window.ILP_SETTINGS.sheetUrl()) 
+                     ? window.ILP_SETTINGS.sheetUrl() 
+                     : "https://script.google.com/macros/s/AKfycbwAlZm5k-4ZEZTAE8n23TStohTJg9uMr9AZL9DBvaUSQr-aiUTzdxuqiSvZoxrfx3BF/exec";
       try {
         if (typeof busy === 'function') busy(true, 'Initializing Cashfree payment...');
 
@@ -8230,9 +8228,11 @@ ILP_AUTH.submitRegistration = async function () {
       }
     },
 
-    async verifyPayment(orderId) {
+  async verifyPayment(orderId) {
       if (typeof busy === 'function') busy(true, 'Confirming payment with bank...');
-      const cloudUrl = window.ILP_SETTINGS ? window.ILP_SETTINGS.sheetUrl() : GOOGLE_SHEET_API_URL;
+      const cloudUrl = (window.ILP_SETTINGS && typeof window.ILP_SETTINGS.sheetUrl === 'function' && window.ILP_SETTINGS.sheetUrl()) 
+                     ? window.ILP_SETTINGS.sheetUrl() 
+                     : "https://script.google.com/macros/s/AKfycbwAlZm5k-4ZEZTAE8n23TStohTJg9uMr9AZL9DBvaUSQr-aiUTzdxuqiSvZoxrfx3BF/exec";
 
       try {
         const res = await fetch(cloudUrl + (cloudUrl.includes('?') ? '&' : '?') + new URLSearchParams({
@@ -8311,7 +8311,9 @@ ILP_AUTH.submitRegistration = async function () {
       const ptBadge = document.getElementById('ilpUserPointsBadge');
       if (ptBadge) ptBadge.textContent = updatedBalance + ' Pts';
 
-      const cloudUrl = window.ILP_SETTINGS ? window.ILP_SETTINGS.sheetUrl() : GOOGLE_SHEET_API_URL;
+    const cloudUrl = (window.ILP_SETTINGS && typeof window.ILP_SETTINGS.sheetUrl === 'function' && window.ILP_SETTINGS.sheetUrl()) 
+                     ? window.ILP_SETTINGS.sheetUrl() 
+                     : "https://script.google.com/macros/s/AKfycbwAlZm5k-4ZEZTAE8n23TStohTJg9uMr9AZL9DBvaUSQr-aiUTzdxuqiSvZoxrfx3BF/exec";
       if (cloudUrl) {
         fetch(cloudUrl + (cloudUrl.includes('?') ? '&' : '?') + new URLSearchParams({
           action: 'debit_points',
