@@ -876,7 +876,6 @@
       .landing-cards-grid,
       #landingSection,
       #bgaiSection,
-      #farmerSection,
       #jointSection,
       #dynamicModuleSection { 
         display: none !important; 
@@ -1025,7 +1024,6 @@
       body.mode-cropper #passportSection,
       body.mode-cropper #bgaiSection,
       body.mode-cropper #landingSection,
-      body.mode-cropper #farmerSection,
       body.mode-cropper #jointSection,
       body.mode-cropper #dynamicModuleSection,
       body.mode-cropper .app-container,
@@ -1203,21 +1201,6 @@
             <span>➔</span>
           </div>
         </div>
-        <div class="landing-hub-card" onclick="switchSuiteSection('farmer')">
-          <div>
-            <div class="l-card-top">
-              <div class="l-card-icon" style="background:#f0fdf4; color:#15803d;">🌾</div>
-              <span class="l-badge-pill" style="background:#dcfce7; color:#166534;">Print Ready</span>
-            </div>
-            <h3>Farmer ID Maker</h3>
-            <p>शेतकरी ओळखपत्र बनवा — 9×6 cm फ्रंट + बॅक, कॉम्बाइंड 18×6 cm प्रिंट. JPG डाउनलोड करा.</p>
-          </div>
-          <div class="l-card-btn" style="color:#15803d;">
-            <span>Open Farmer ID</span>
-            <span>➔</span>
-          </div>
-        </div>
-      
         <div class="landing-hub-card" onclick="switchSuiteSection('joint')">
           <div>
             <div class="l-card-top">
@@ -1230,6 +1213,22 @@
           <div class="l-card-btn" style="color:#a21caf;">
             <span>Open Joint Photo</span>
             <span>➔</span>
+          </div>
+        </div>
+
+       <div class="landing-hub-card" role="link" tabindex="0"
+     onclick="openBandhkamModule()"
+     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openBandhkamModule();}">
+          <div>
+            <div class="l-card-top">
+              <div class="l-card-icon" style="background:#fff7ed;color:#c2410c;">🪪</div>
+              <span class="l-badge-pill" style="background:#ffedd5;color:#9a3412;">MAHA BOCW</span>
+            </div>
+            <h3>Bandhkam Kamgar Card</h3>
+            <p>Upload the card details and prepare the MahaBOCW / Bandhkam Kamgar ID card using the dedicated card maker.</p>
+          </div>
+          <div class="l-card-btn" style="color:#c2410c;">
+            <span>Open Bandhkam Kamgar Card</span><span>➔</span>
           </div>
         </div>
 </div>
@@ -1579,6 +1578,12 @@
               <label id="centerFoldOption" style="font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px;margin-top:8px;">
                 <input type="checkbox" id="centerFoldCheck" checked> ✂️ Center fold line (dotted)
               </label>
+              <div id="foldGapOption" style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+                <label for="foldGapCm" style="font-size:12px;font-weight:600;color:#334155;">✂️ Fold gap:</label>
+                <input type="number" id="foldGapCm" value="0.1" min="0" max="1" step="0.05"
+                       style="width:72px;padding:6px 8px;border:1px solid #dce2ec;border-radius:10px;font-size:13px;font-weight:600;">
+                <span style="font-size:11px;color:#64748b;">cm white space at fold</span>
+              </div>
             </div>
           </div>
         </div>
@@ -1879,33 +1884,6 @@
       </div>
     </div>
 
-    <!-- 4. FARMER ID MAKER -->
-    <div id="farmerSection" style="display:none;">
-      <div class="card no-print" style="margin-bottom: 20px;">
-        <div class="top-bar">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <button class="home-nav-btn" onclick="switchSuiteSection('landing')">
-              🏠 Return to Home / Hub
-            </button>
-            <div>
-              <h2>🌾 Farmer ID Card Maker (9×6 cm)</h2>
-              <small>Front 9×6 cm &bull; Back 9×6 cm &bull; Combined 18×6 cm Print</small>
-            </div>
-          </div>
-          <div class="usage-badge">
-            <span>🌾 शेतकरी ओळखपत्र</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="padding:0; overflow:hidden; background:transparent; border:none; box-shadow:none;">
-        <iframe id="farmerFrame"
-                style="width:100%; height:calc(100vh - 200px); min-height:900px; border:0; display:block; background:#eef2f7; border-radius:24px;"
-                title="Farmer ID Maker"></iframe>
-      </div>
-    </div>
-
-    
     <!-- 5. JOINT PASSPORT PHOTO MAKER -->
     <div id="jointSection" style="display:none;">
       <div class="card no-print" style="margin-bottom: 20px;">
@@ -1931,7 +1909,31 @@
                 title="Joint Passport Photo Maker"></iframe>
       </div>
     </div>
+<!-- 6. BANDHKAM KAMGAR / MAHABOCW ID CARD MODULE -->
+<div id="bandhkamSection" style="display:none;">
+  <div class="card no-print" style="margin-bottom: 20px;">
+    <div class="top-bar">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <button class="home-nav-btn" onclick="switchSuiteSection('landing')">
+          🏠 Return to Home / Hub
+        </button>
+        <div>
+          <h2>🪪 Bandhkam Kamgar / MahaBOCW ID Card</h2>
+          <small>Dedicated card maker module</small>
+        </div>
+      </div>
+      <div class="usage-badge">
+        <span>🪪 MAHA BOCW</span>
+      </div>
+    </div>
+  </div>
 
+  <div class="card" style="padding:0; overflow:hidden; background:transparent; border:none; box-shadow:none;">
+    <iframe id="bandhkamFrame"
+            style="width:100%; height:calc(100vh - 200px); min-height:900px; border:0; display:block; background:#eef2f7; border-radius:24px;"
+            title="Bandhkam Kamgar Card Maker"></iframe>
+  </div>
+</div>
 <!-- MIDDLE ADSENSE UNIT -->
     <div class="adsense-container no-print">
       <span class="ad-label">Advertisement</span>
@@ -2465,6 +2467,12 @@
       if (savedCol !== null) cardColGapInput.value = savedCol;
       updateCardSheetGap();
 
+      const savedFoldGap = localStorage.getItem('id_fold_gap_cm');
+      if (savedFoldGap !== null) {
+        const fgEl = document.getElementById('foldGapCm');
+        if (fgEl) fgEl.value = savedFoldGap;
+      }
+
       const smTop = localStorage.getItem('page_margin_top');
       const smBottom = localStorage.getItem('page_margin_bottom');
       const smLeft = localStorage.getItem('page_margin_left');
@@ -2792,6 +2800,8 @@
       customSizeInputs.style.display = sizePreset.value === 'custom' ? 'grid' : 'none';
       const { isSingle } = getTargetDimensions();
       document.getElementById('centerFoldOption').style.display = isSingle ? 'none' : 'flex';
+      const fgOpt = document.getElementById('foldGapOption');
+      if (fgOpt) fgOpt.style.display = isSingle ? 'none' : 'flex';
       if (currentStep === 'front') setWorkflowStep('front');
 
       // Sync big mode buttons when user picks from dropdown
@@ -3279,6 +3289,16 @@
 
       const pixelWidth = Math.round(wCm * DPICM);
       const pixelHeight = Math.round(hCm * DPICM);
+
+      /* ── Fold-gap (default 0.1cm white strip at fold line) ──────── */
+      const foldGapCmInput = document.getElementById('foldGapCm');
+      const foldGapCmVal   = Math.max(0, Math.min(1, parseFloat(foldGapCmInput && foldGapCmInput.value) || 0));
+      let   foldGapPx      = Math.round(foldGapCmVal * DPICM);
+      const maxFoldGapPx   = Math.floor(Math.min(pixelWidth, pixelHeight) * 0.2);
+      foldGapPx = Math.min(foldGapPx, maxFoldGapPx);
+      if (foldGapCmInput) localStorage.setItem('id_fold_gap_cm', foldGapCmVal);
+      /* ──────────────────────────────────────────────────────────── */
+
       const finalCanvas = document.createElement('canvas');
       finalCanvas.width = pixelWidth; finalCanvas.height = pixelHeight;
       const fCtx = finalCanvas.getContext('2d', { willReadFrequently: true });
@@ -3290,20 +3310,25 @@
       if (isSingle) {
         fCtx.drawImage(frontCropData, 0, 0, pixelWidth, pixelHeight);
       } else if (is4x6UpDownInverted) {
-        const halfH = pixelHeight / 2;
+        const availH = pixelHeight - foldGapPx;
+        const halfH  = availH / 2;
         fCtx.drawImage(frontCropData, 0, 0, pixelWidth, halfH);
         
         fCtx.save();
-        fCtx.translate(pixelWidth / 2, halfH + halfH / 2);
+        fCtx.translate(pixelWidth / 2, halfH + foldGapPx + halfH / 2);
         fCtx.rotate(Math.PI);
         fCtx.drawImage(backCropData, -pixelWidth / 2, -halfH / 2, pixelWidth, halfH);
         fCtx.restore();
       } else if (!isVertical) {
-        fCtx.drawImage(frontCropData, 0, 0, pixelWidth / 2, pixelHeight);
-        fCtx.drawImage(backCropData, pixelWidth / 2, 0, pixelWidth / 2, pixelHeight);
+        const availW = pixelWidth - foldGapPx;
+        const halfW  = availW / 2;
+        fCtx.drawImage(frontCropData, 0, 0, halfW, pixelHeight);
+        fCtx.drawImage(backCropData,  halfW + foldGapPx, 0, halfW, pixelHeight);
       } else {
-        fCtx.drawImage(frontCropData, 0, 0, pixelWidth, pixelHeight / 2);
-        fCtx.drawImage(backCropData, 0, pixelHeight / 2, pixelWidth, pixelHeight / 2);
+        const availH = pixelHeight - foldGapPx;
+        const halfH  = availH / 2;
+        fCtx.drawImage(frontCropData, 0, 0, pixelWidth, halfH);
+        fCtx.drawImage(backCropData,  0, halfH + foldGapPx, pixelWidth, halfH);
       }
 
       if (enableBorderCheck.checked) {
@@ -7023,7 +7048,8 @@ function json(obj) {
       if (!grid) return;
       grid.querySelectorAll('[data-dynamic-module]').forEach(el => el.remove());
 
-      this.cache.forEach(m => {
+      this.cache
+        .forEach(m => {
         const card = document.createElement('div');
         card.className = 'landing-hub-card';
         card.setAttribute('data-dynamic-module', m.id);
@@ -7837,21 +7863,15 @@ ILP_AUTH.submitRegistration = async function () {
 
 
 <!-- ============================================================
-     iLovePrint ADD-ON v5 — External HTML Modules (Farmer + Joint Photo)
+     iLovePrint ADD-ON v5 — External HTML Modules (Joint Photo)
      Loads external HTML files into iframes. Place files next to this page
-     on GitHub Pages / hosting (e.g. joint-photo.html, farmer-id-maker.html).
+     on GitHub Pages / hosting (e.g. joint-photo.html).
      ============================================================ -->
 <script>
 (function () {
   'use strict';
 
   const MODULES = {
-    farmer: {
-      path: 'farmer-id-maker.html',
-      sectionId: 'farmerSection',
-      frameId: 'farmerFrame',
-      bodyClass: 'mode-farmer'
-    },
     joint: {
       path: 'joint-photo.html',
       sectionId: 'jointSection',
@@ -7927,5 +7947,83 @@ ILP_AUTH.submitRegistration = async function () {
   console.log('[iLovePrint] External modules ready:', Object.keys(MODULES).join(', '));
 })();
 </script>
+
+<!-- ============================================================
+     iLovePrint ADD-ON v6 — Bandhkam Kamgar module (iframe + home bar)
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  const BANDHKAM_PATH = 'MahaBOCW_ID_Card_Download_Fix.html';
+  const SECTION_ID    = 'bandhkamSection';
+  const FRAME_ID      = 'bandhkamFrame';
+  const OTHER_SECTIONS = [
+    'landingSection','smartIdSection','passportSection',
+    'bgaiSection','cropperSection','jointSection','dynamicModuleSection'
+  ];
+
+  function hideOthers() {
+    OTHER_SECTIONS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+  }
+
+  function requireAuth() {
+    var acc     = JSON.parse(localStorage.getItem('iloveprint_account') || 'null');
+    var adminIn = sessionStorage.getItem('iloveprint_admin_session') === '1';
+    if (adminIn) return true;
+    if (!acc) { window.ILP_AUTH.showRegistration(); return false; }
+    if (acc.status !== 'approved') {
+      if (acc.status === 'pending_payment') window.ILP_AUTH.showPaymentModal();
+      else                                  window.ILP_AUTH.showPending();
+      return false;
+    }
+    if (acc.expiryDate && Date.now() > acc.expiryDate) {
+      window.ILP_AUTH.showExpired();
+      return false;
+    }
+    return true;
+  }
+
+  window.openBandhkamModule = function () {
+    if (!requireAuth()) return;
+
+    hideOthers();
+
+    var tg = document.getElementById('topGuideBar');
+    if (tg) tg.style.display = 'none';
+    var hb = document.getElementById('topHubReturnBtn');
+    if (hb) hb.style.display = 'inline-flex';
+
+    var iframe = document.getElementById(FRAME_ID);
+    if (iframe && !iframe.dataset.loaded) {
+      iframe.src = BANDHKAM_PATH;
+      iframe.dataset.loaded = '1';
+    }
+
+    var sec = document.getElementById(SECTION_ID);
+    if (sec) sec.style.display = 'block';
+    document.body.className = 'mode-bandhkam';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Wrap switchSuiteSection so `mode === 'bandhkam'` is handled
+  // and switching away always hides the Bandhkam section.
+  var _origSwitch = window.switchSuiteSection;
+  window.switchSuiteSection = function (mode) {
+    var sec = document.getElementById(SECTION_ID);
+    if (sec) sec.style.display = 'none';
+    if (mode === 'bandhkam') { window.openBandhkamModule(); return; }
+    return _origSwitch.apply(this, arguments);
+  };
+
+  console.log('[iLovePrint] Bandhkam Kamgar module ready.');
+})();
+</script>
+<!-- ============ END iLovePrint ADD-ON v6 ============ -->
+
+
 </body>
 </html>
