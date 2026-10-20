@@ -7424,7 +7424,7 @@ function json(obj) {
   }
 
   /* ---------------- account mapping ---------------- */
-  function saveAccountFromServer(u) {
+function saveAccountFromServer(u) {
     const prev = LS.get(ACC_KEY, {}) || {};
     const acc = {
       name: u.name || prev.name || '',
@@ -7440,6 +7440,7 @@ function json(obj) {
       rechargeDate: u.rechargeDate ? Date.parse(u.rechargeDate) : prev.rechargeDate || null,
       expiryDate: u.expiryDate ? Date.parse(u.expiryDate) : prev.expiryDate || null,
       planDays: u.planDays || prev.planDays || cfg().planDays,
+      points_balance: u.points_balance != null ? Number(u.points_balance) : (prev.points_balance != null ? Number(prev.points_balance) : 0),
       stats: u.stats || prev.stats || { idCards:0, passportPhotos:0, cropperPrints:0, bgRemovals:0, enhancements:0 },
       lastSync: Date.now()
     };
