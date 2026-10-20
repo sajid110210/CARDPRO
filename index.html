@@ -8229,7 +8229,7 @@ ILP_AUTH.submitRegistration = async function () {
       }
     },
 
-  async function verifyPayment(orderId) {
+    async verifyPayment(orderId) {
       if (typeof busy === 'function') busy(true, 'Confirming payment with bank...');
       const cloudUrl = window.ILP_SETTINGS ? window.ILP_SETTINGS.sheetUrl() : GOOGLE_SHEET_API_URL;
 
@@ -8242,7 +8242,6 @@ ILP_AUTH.submitRegistration = async function () {
         if (typeof busy === 'function') busy(false);
 
         if (data.ok) {
-          // Update local account session with live data from payment
           const acc = ILP_AUTH.getAccount();
           acc.status = 'approved';
           acc.amount = data.amount || (data.planType === 'UNLIMITED' ? 100 : 20);
@@ -8253,7 +8252,7 @@ ILP_AUTH.submitRegistration = async function () {
             acc.rechargeDate = Date.now();
           } else if (data.planType === 'POINTS') {
             acc.points_balance = Number(data.currentPoints) || 0;
-            acc.expiryDate = null; // Points have no expiration date
+            acc.expiryDate = null;
             acc.rechargeDate = Date.now();
           }
 
@@ -8270,22 +8269,20 @@ ILP_AUTH.submitRegistration = async function () {
         alert("Payment completed. Click 'Check Status' in your dashboard if balance doesn't refresh automatically.");
       }
     }
+  };
 
   /* ------------------- Centralized Wallet Rules ------------------- */
   window.ILP_WALLET = {
-    // Check if user is eligible to perform an action
     canUse(cost = 1) {
       const acc = ILP_AUTH.getAccount();
       const adminIn = sessionStorage.getItem('iloveprint_admin_session') === '1';
       if (adminIn) return true;
       if (!acc) { ILP_AUTH.showRegistration(); return false; }
 
-      // Rule 1: Monthly Unlimited Pass always grants free unlimited access
       if (acc.status === 'approved' && acc.expiryDate && Date.now() < acc.expiryDate) {
         return true;
       }
 
-      // Rule 2: Point balance validation
       const pts = Number(acc.points_balance) || 0;
       if (pts >= cost) {
         return true;
@@ -8296,13 +8293,11 @@ ILP_AUTH.submitRegistration = async function () {
       return false;
     },
 
-    // Deduct points after successful generation/print
     debit(serviceName, cost = 1) {
       const acc = ILP_AUTH.getAccount();
       const adminIn = sessionStorage.getItem('iloveprint_admin_session') === '1';
       if (adminIn || !acc) return;
 
-      // Do NOT deduct if user has an active unlimited monthly pass
       if (acc.status === 'approved' && acc.expiryDate && Date.now() < acc.expiryDate) {
         return;
       }
@@ -8315,7 +8310,6 @@ ILP_AUTH.submitRegistration = async function () {
       const ptBadge = document.getElementById('ilpUserPointsBadge');
       if (ptBadge) ptBadge.textContent = updatedBalance + ' Pts';
 
-      // Sync deduction with Google Sheet backend
       const cloudUrl = window.ILP_SETTINGS ? window.ILP_SETTINGS.sheetUrl() : GOOGLE_SHEET_API_URL;
       if (cloudUrl) {
         fetch(cloudUrl + (cloudUrl.includes('?') ? '&' : '?') + new URLSearchParams({
@@ -8331,7 +8325,6 @@ ILP_AUTH.submitRegistration = async function () {
 
   window.ILP_CASHFREE = ILP_CASHFREE;
 
-  // Update Points Badge on refresh
   const origRefreshBadge = window.refreshBadge;
   window.refreshBadge = function () {
     if (origRefreshBadge) origRefreshBadge.apply(this, arguments);
