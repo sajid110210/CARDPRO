@@ -8084,6 +8084,86 @@ ILP_AUTH.submitRegistration = async function () {
 </script>
 <!-- ============ END iLovePrint ADD-ON v6 ============ -->
 
+ <!-- ============================================================
+     GLOBAL ACCESS GATE — Enforces Registration for ALL Modules
+     ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  function enforceModuleAuth(moduleName) {
+    if (!moduleName || moduleName === 'landing') return true;
+
+    // Check if admin is logged in
+    var isAdmin = sessionStorage.getItem('iloveprint_admin_session') === '1' || 
+                  sessionStorage.getItem('iloveprint_admin_key') === 'ILP-SECURE-ADMIN-2026';
+    if (isAdmin) return true;
+
+    // Retrieve user account
+    var acc = JSON.parse(localStorage.getItem('iloveprint_account') || 'null');
+
+    // 1. If user is not registered at all -> Open "Create Your Account" modal
+    if (!acc || !acc.mobile) {
+      if (window.ILP_AUTH && typeof window.ILP_AUTH.showRegistration === 'function') {
+        window.ILP_AUTH.showRegistration();
+      } else {
+        var regModal = document.getElementById('ilpRegModal');
+        if (regModal) regModal.style.display = 'flex';
+      }
+      return false;
+    }
+
+    // 2. If registered but unpaid or pending approval
+    if (acc.status === 'pending_payment') {
+      if (window.ILP_AUTH && typeof window.ILP_AUTH.showPaymentModal === 'function') {
+        window.ILP_AUTH.showPaymentModal();
+      }
+      return false;
+    }
+    if (acc.status === 'pending_approval') {
+      if (window.ILP_AUTH && typeof window.ILP_AUTH.showPending === 'function') {
+        window.ILP_AUTH.showPending();
+      }
+      return false;
+    }
+
+    // 3. Balance verification (Unlimited Pass or Points)
+    var pts = Number(acc.points_balance) || 0;
+    var isUnlimited = acc.status === 'approved' && acc.expiryDate && (new Date(acc.expiryDate).getTime() > Date.now());
+
+    // Expired pass with zero points
+    if (acc.status === 'approved' && acc.expiryDate && (new Date(acc.expiryDate).getTime() <= Date.now()) && pts <= 0) {
+      if (window.ILP_AUTH && typeof window.ILP_AUTH.showExpired === 'function') {
+        window.ILP_AUTH.showExpired();
+      }
+      return false;
+    }
+
+    // 0 points and no active pass
+    if (!isUnlimited && pts <= 0) {
+      alert('⚠️ Your balance is 0 Points and your plan is inactive.\nPlease recharge points or get 1 Month Unlimited to use the tools.');
+      if (window.ILP_AUTH && typeof window.ILP_AUTH.showPaymentModal === 'function') {
+        window.ILP_AUTH.showPaymentModal();
+      }
+      return false;
+    }
+
+    return true;
+  }
+
+  // Intercept switchSuiteSection globally across all tools
+  var baseSwitch = window.switchSuiteSection;
+  window.switchSuiteSection = function(mode) {
+    if (!enforceModuleAuth(mode)) {
+      return; // Stop and prompt registration or recharge
+    }
+    if (typeof baseSwitch === 'function') {
+      return baseSwitch.apply(this, arguments);
+    }
+  };
+
+})();
+</script>
 
   
 
@@ -8270,90 +8350,8 @@ ILP_AUTH.submitRegistration = async function () {
 })();
 </script>
 
-  <!-- ============================================================
-     GLOBAL ACCESS GATE — Enforces Registration for ALL Modules
-     ============================================================ -->
-<script>
-(function() {
-  'use strict';
-
-  function enforceModuleAuth(moduleName) {
-    if (!moduleName || moduleName === 'landing') return true;
-
-    // Check if admin is logged in
-    var isAdmin = sessionStorage.getItem('iloveprint_admin_session') === '1' || 
-                  sessionStorage.getItem('iloveprint_admin_key') === 'ILP-SECURE-ADMIN-2026';
-    if (isAdmin) return true;
-
-    // Retrieve user account
-    var acc = JSON.parse(localStorage.getItem('iloveprint_account') || 'null');
-
-    // 1. If user is not registered at all -> Open "Create Your Account" modal
-    if (!acc || !acc.mobile) {
-      if (window.ILP_AUTH && typeof window.ILP_AUTH.showRegistration === 'function') {
-        window.ILP_AUTH.showRegistration();
-      } else {
-        var regModal = document.getElementById('ilpRegModal');
-        if (regModal) regModal.style.display = 'flex';
-      }
-      return false;
-    }
-
-    // 2. If registered but unpaid or pending approval
-    if (acc.status === 'pending_payment') {
-      if (window.ILP_AUTH && typeof window.ILP_AUTH.showPaymentModal === 'function') {
-        window.ILP_AUTH.showPaymentModal();
-      }
-      return false;
-    }
-    if (acc.status === 'pending_approval') {
-      if (window.ILP_AUTH && typeof window.ILP_AUTH.showPending === 'function') {
-        window.ILP_AUTH.showPending();
-      }
-      return false;
-    }
-
-    // 3. Balance verification (Unlimited Pass or Points)
-    var pts = Number(acc.points_balance) || 0;
-    var isUnlimited = acc.status === 'approved' && acc.expiryDate && (new Date(acc.expiryDate).getTime() > Date.now());
-
-    // Expired pass with zero points
-    if (acc.status === 'approved' && acc.expiryDate && (new Date(acc.expiryDate).getTime() <= Date.now()) && pts <= 0) {
-      if (window.ILP_AUTH && typeof window.ILP_AUTH.showExpired === 'function') {
-        window.ILP_AUTH.showExpired();
-      }
-      return false;
-    }
-
-    // 0 points and no active pass
-    if (!isUnlimited && pts <= 0) {
-      alert('⚠️ Your balance is 0 Points and your plan is inactive.\nPlease recharge points or get 1 Month Unlimited to use the tools.');
-      if (window.ILP_AUTH && typeof window.ILP_AUTH.showPaymentModal === 'function') {
-        window.ILP_AUTH.showPaymentModal();
-      }
-      return false;
-    }
-
-    return true;
-  }
-
-  // Intercept switchSuiteSection globally across all tools
-  var baseSwitch = window.switchSuiteSection;
-  window.switchSuiteSection = function(mode) {
-    if (!enforceModuleAuth(mode)) {
-      return; // Stop and prompt registration or recharge
-    }
-    if (typeof baseSwitch === 'function') {
-      return baseSwitch.apply(this, arguments);
-    }
-  };
-
-})();
-</script>
-
+ 
 </body>
 </html>
 
 
-</body>
-</html>
