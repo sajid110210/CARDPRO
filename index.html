@@ -5419,9 +5419,9 @@
       }
     });
 
+   window._rawSwitchSuiteSection = switchSuiteSection;
     switchSuiteSection('landing');
   </script>
-
 
 <!-- ============================================================
      iLovePrint SECURITY PATCH v1 — Obfuscated secrets & DevTools deterrents
@@ -6700,39 +6700,10 @@ password: acc.password || acc.mobile, status: acc.status, amount: acc.amount,
   /* ============================================================
      APPROVAL GATE — wrap switchSuiteSection
      ============================================================ */
-  const _origSwitch = window.switchSuiteSection;
-if (typeof _origSwitch === 'function') {
-  window.switchSuiteSection = function (mode) {
-    const acc = LS.get(K.ACC, null);
-    const adminIn = sessionStorage.getItem(K.ADMIN) === '1';
-    if (mode && mode !== 'landing' && !adminIn) {
-      if (!acc) { 
-        ILP_AUTH.showRegistration(); 
-        return; 
-      }
 
-      const pts = Number(acc.points_balance) || 0;
-      const isUnlimited = acc.status === 'approved' && acc.expiryDate && (new Date(acc.expiryDate).getTime() > Date.now());
+// Handled cleanly by Master Router at the bottom
 
-      // If the user is on an expired unlimited pass and has no points:
-      if (acc.status === 'approved' && acc.expiryDate && (new Date(acc.expiryDate).getTime() <= Date.now()) && pts <= 0) {
-        ILP_AUTH.showExpired();
-        return;
-      }
-
-      // If the user has 0 points and no active unlimited pass:
-      if (!isUnlimited && pts <= 0) {
-        alert('⚠️ Your balance is 0 Points and you do not have an active monthly pass.\nPlease recharge points or get 1 Month Unlimited to use the tools.');
-        ILP_AUTH.showPaymentModal();
-        return;
-      }
-
-      addLog('tool_open', mode);
-    }
-    return _origSwitch.apply(this, arguments);
-  };
-}
-
+  
   /* ============================================================
      STAT HOOKS — override checkMilestoneAndRecord
      ============================================================ */
@@ -8071,32 +8042,23 @@ ILP_AUTH.submitRegistration = async function () {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-  /* ============================================================
-     MASTER MODULE ROUTER — Unifies All 6 Tools & Enforces Wallet/Auth
+/* ============================================================
+     MASTER MODULE ROUTER — Clean Delegation & Wallet Gate
      ============================================================ */
   window.switchSuiteSection = function (mode) {
-    // 1. Landing page is always public
+    // 1. Landing Hub Return
     if (!mode || mode === 'landing') {
-      currentActiveStudio = 'landing';
-      document.body.className = 'mode-landing';
-      [
-        'smartIdSection', 'passportSection', 'bgaiSection', 'cropperSection',
-        'jointSection', 'bandhkamSection', 'dynamicModuleSection'
-      ].forEach(function (id) {
-        var el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-      });
-      var land = document.getElementById('landingSection');
-      if (land) land.style.display = 'block';
-      var hb = document.getElementById('topHubReturnBtn');
-      if (hb) hb.style.display = 'none';
-      var tg = document.getElementById('topGuideBar');
-      if (tg) tg.style.display = 'none';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (typeof hideOthers === 'function') hideOthers();
+      if (typeof hideExternalSections === 'function') hideExternalSections();
+      var bSec = document.getElementById('bandhkamSection');
+      if (bSec) bSec.style.display = 'none';
+      if (typeof window._rawSwitchSuiteSection === 'function') {
+        return window._rawSwitchSuiteSection('landing');
+      }
       return;
     }
 
-    // 2. Authentication & Access Gate
+    // 2. Authentication & Points Wallet Gate
     var adminIn = sessionStorage.getItem('iloveprint_admin_session') === '1' || 
                   sessionStorage.getItem('iloveprint_admin_key') === 'ILP-SECURE-ADMIN-2026';
     if (!adminIn) {
@@ -8109,7 +8071,7 @@ ILP_AUTH.submitRegistration = async function () {
         return;
       }
 
-      // Unpaid or pending
+      // Unpaid or pending approval
       if (acc.status === 'pending_payment') {
         if (window.ILP_AUTH) window.ILP_AUTH.showPaymentModal();
         return;
@@ -8119,7 +8081,7 @@ ILP_AUTH.submitRegistration = async function () {
         return;
       }
 
-      // Check balance (Unlimited or Points)
+      // Check balance (Unlimited Pass or Points Wallet)
       var pts = Number(acc.points_balance) || 0;
       var isUnlimited = acc.status === 'approved' && acc.expiryDate && (new Date(acc.expiryDate).getTime() > Date.now());
 
@@ -8135,68 +8097,28 @@ ILP_AUTH.submitRegistration = async function () {
       }
     }
 
-    // 3. Hide ALL sections universally
-    var allSections = [
-      'landingSection', 'smartIdSection', 'passportSection', 'bgaiSection',
-      'cropperSection', 'jointSection', 'bandhkamSection', 'dynamicModuleSection'
-    ];
-    allSections.forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.style.display = 'none';
-    });
+    // 3. Clean up external and iframe containers
+    if (typeof hideOthers === 'function') hideOthers();
+    if (typeof hideExternalSections === 'function') hideExternalSections();
+    var bSec = document.getElementById('bandhkamSection');
+    if (bSec) bSec.style.display = 'none';
 
-    var hubBtn = document.getElementById('topHubReturnBtn');
-    if (hubBtn) hubBtn.style.display = 'inline-flex';
-    var topGuide = document.getElementById('topGuideBar');
-
-    // 4. Route directly to the selected tool
-    currentActiveStudio = mode;
-
+    // 4. Route External Iframe Modules
     if (mode === 'bandhkam') {
       window.openBandhkamModule();
       return;
     }
-
     if (mode === 'joint') {
-      var jFrame = document.getElementById('jointFrame');
-      if (jFrame && !jFrame.dataset.loaded) {
-        jFrame.src = 'joint-photo.html';
-        jFrame.dataset.loaded = '1';
+      if (typeof openExternalModule === 'function') {
+        openExternalModule('joint');
       }
-      var jSec = document.getElementById('jointSection');
-      if (jSec) jSec.style.display = 'block';
-      document.body.className = 'mode-joint';
-      if (topGuide) topGuide.style.display = 'none';
-    } else if (mode === 'cropper') {
-      document.body.className = 'mode-cropper';
-      var crSec = document.getElementById('cropperSection');
-      if (crSec) crSec.style.display = 'block';
-      if (topGuide) topGuide.style.display = 'none';
-      if (typeof showHindiToast === 'function') showHindiToast('📐 इमेज चुनें या Ctrl+V से पेस्ट करके सीधा करें।');
-      if (typeof fitA4Preview === 'function') fitA4Preview();
-    } else if (mode === 'passport') {
-      document.body.className = 'mode-passport';
-      var psSec = document.getElementById('passportSection');
-      if (psSec) psSec.style.display = 'block';
-      if (topGuide) topGuide.style.display = 'flex';
-      if (typeof updateTopGuide === 'function') updateTopGuide('PASSPORT STUDIO', '📸 Click <b>"+ Add Photo"</b>, Drag-Drop, or <b>Paste (Ctrl+V)</b>.');
-      if (typeof showHindiToast === 'function') showHindiToast('📸 फोटो चुनें, ड्रैग करें या Ctrl+V से पेस्ट करें।');
-      if (typeof updatePassportLayout === 'function') updatePassportLayout();
-    } else if (mode === 'bgai') {
-      document.body.className = 'mode-bgai';
-      var bgSec = document.getElementById('bgaiSection');
-      if (bgSec) bgSec.style.display = 'block';
-      if (topGuide) topGuide.style.display = 'flex';
-      if (typeof updateTopGuide === 'function') updateTopGuide('AI STUDIO', '✨ Upload or <b>Paste (Ctrl+V)</b> photo for Neural Matting &amp; Upscale.');
-    } else { // 'id'
-      document.body.className = 'mode-id';
-      var idSec = document.getElementById('smartIdSection');
-      if (idSec) idSec.style.display = 'block';
-      if (topGuide) topGuide.style.display = 'flex';
-      if (typeof setWorkflowStep === 'function') setWorkflowStep(currentStep || 'idle');
+      return;
     }
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // 5. Route Native Built-in Modules (Cropper, ID Studio, Passport, AI Background)
+    if (typeof window._rawSwitchSuiteSection === 'function') {
+      window._rawSwitchSuiteSection(mode);
+    }
   };
 
   console.log('[iLovePrint] Bandhkam Kamgar module ready.');
