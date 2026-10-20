@@ -8229,7 +8229,7 @@ ILP_AUTH.submitRegistration = async function () {
       }
     },
 
-    async verifyPayment(orderId) {
+  async function verifyPayment(orderId) {
       if (typeof busy === 'function') busy(true, 'Confirming payment with bank...');
       const cloudUrl = window.ILP_SETTINGS ? window.ILP_SETTINGS.sheetUrl() : GOOGLE_SHEET_API_URL;
 
@@ -8242,10 +8242,6 @@ ILP_AUTH.submitRegistration = async function () {
         if (typeof busy === 'function') busy(false);
 
         if (data.ok) {
-          // Update local account session
-          const acc = ILP_AUTH.getAccount();
-          acc.status = 'approved';
-         if (data.ok) {
           // Update local account session with live data from payment
           const acc = ILP_AUTH.getAccount();
           acc.status = 'approved';
@@ -8274,7 +8270,6 @@ ILP_AUTH.submitRegistration = async function () {
         alert("Payment completed. Click 'Check Status' in your dashboard if balance doesn't refresh automatically.");
       }
     }
-  };
 
   /* ------------------- Centralized Wallet Rules ------------------- */
   window.ILP_WALLET = {
