@@ -1445,8 +1445,17 @@ els.enhanceChk.addEventListener('change', refreshImages);
 els.dlFront.addEventListener('click', () => { if (state.frontCanvas) state.frontCanvas.toBlob(b => downloadBlob(b, `${state.fileName}_front.png`), 'image/png'); });
 els.dlBack.addEventListener('click', () => { if (state.backCanvas) state.backCanvas.toBlob(b => downloadBlob(b, `${state.fileName}_back.png`), 'image/png'); });
 
+function notifyParentPrint() {
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'ilp-one-click-card-print', tool: state.currentTool || 'idcard' }, '*');
+    }
+  } catch (e) {}
+}
+
 els.btnCombinedPng.addEventListener('click', () => {
   if (!state.sheetCanvases.length) return;
+  notifyParentPrint();
   if (state.sheetCanvases.length === 1) { state.sheetCanvases[0].toBlob(b => downloadBlob(b, `${state.fileName}_${state.layout}_combined.png`), 'image/png'); return; }
   const gapPx = 20; const w = Math.max(...state.sheetCanvases.map(c => c.width)); const h = state.sheetCanvases.reduce((a, c) => a + c.height, 0) + gapPx * (state.sheetCanvases.length - 1);
   const out = document.createElement('canvas'); out.width = w; out.height = h; const ctx = out.getContext('2d'); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
@@ -1457,13 +1466,16 @@ els.btnCombinedPng.addEventListener('click', () => {
 els.btnCombinedPdf.addEventListener('click', () => {
   if (!state.sheetCanvases.length) return; setStatus('Building print-ready PDF…');
   try {
+    notifyParentPrint();
     const pages = state.sheetCanvases.map((cv, i) => ({ jpeg: canvasToJpegBytes(cv, 0.94), wPx: cv.width, hPx: cv.height, wMm: state.layoutPages[i].wMm, hMm: state.layoutPages[i].hMm }));
     downloadBlob(new Blob([buildPDF(pages)], { type: 'application/pdf' }), `${state.fileName}_${state.layout}_print.pdf`); setStatus('Print-ready PDF downloaded.', 'ok');
   } catch (err) { console.error(err); setStatus('PDF export failed: ' + err.message, 'err'); }
 });
 
 els.btnPrint.addEventListener('click', async () => {
-  if (!state.sheetCanvases.length) return; const first = state.layoutPages[0];
+  if (!state.sheetCanvases.length) return;
+  notifyParentPrint();
+  const first = state.layoutPages[0];
   els.printStyle.textContent = `@page { size: ${first.wMm.toFixed(2)}mm ${first.hMm.toFixed(2)}mm; margin: 0; }`; els.printArea.innerHTML = '';
   for (let i = 0; i < state.sheetCanvases.length; i++) {
     const p = state.layoutPages[i]; const img = new Image(); img.className = 'print-page';
