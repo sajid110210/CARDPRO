@@ -884,6 +884,8 @@
       #landingSection,
       #bgaiSection,
       #jointSection,
+      #oneClickCardSection,
+      #bandhkamSection,
       #dynamicModuleSection { 
         display: none !important; 
       }
@@ -1032,6 +1034,8 @@
       body.mode-cropper #bgaiSection,
       body.mode-cropper #landingSection,
       body.mode-cropper #jointSection,
+      body.mode-cropper #oneClickCardSection,
+      body.mode-cropper #bandhkamSection,
       body.mode-cropper #dynamicModuleSection,
       body.mode-cropper .app-container,
       body.mode-cropper .site-top-header,
@@ -1238,6 +1242,23 @@
             <span>Open Bandhkam Kamgar Card</span><span>➔</span>
           </div>
         </div>
+
+        <div class="landing-hub-card" role="link" tabindex="0"
+     onclick="openOneClickCardModule()"
+     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openOneClickCardModule();}">
+          <div>
+            <div class="l-card-top">
+              <div class="l-card-icon" style="background:#eef2ff;color:#4f46e5;">🪪</div>
+              <span class="l-badge-pill" style="background:#e0e7ff;color:#3730a3;">One-Click Suite</span>
+            </div>
+            <h3>One-Click ID Card Maker</h3>
+            <p>Aadhar, PAN, Voter, ABHA, Ayushman, e-Shram, Ration &amp; more — auto-crop front &amp; back, enhance photo, print A4 / 4×6 / PVC.</p>
+          </div>
+          <div class="l-card-btn" style="color:#4f46e5;">
+            <span>Open One-Click Card Suite</span><span>➔</span>
+          </div>
+        </div>
+
 </div>
     </section>
 
@@ -1935,6 +1956,33 @@
             title="Bandhkam Kamgar Card Maker"></iframe>
   </div>
 </div>
+
+<!-- 7. ONE-CLICK ID CARD MAKER SUITE -->
+<div id="oneClickCardSection" style="display:none;">
+  <div class="card no-print" style="margin-bottom: 20px;">
+    <div class="top-bar">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <button class="home-nav-btn" onclick="switchSuiteSection('landing')">
+          🏠 Return to Home / Hub
+        </button>
+        <div>
+          <h2>🪪 One-Click ID Card Maker Suite</h2>
+          <small>Aadhar · PAN · Voter · ABHA · Ayushman · e-Shram · Ration · Auto crop &amp; print</small>
+        </div>
+      </div>
+      <div class="usage-badge">
+        <span>🪪 One-Click Suite · 1 pt / print</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:0; overflow:hidden; background:transparent; border:none; box-shadow:none;">
+    <iframe id="oneClickCardFrame"
+            style="width:100%; height:calc(100vh - 200px); min-height:900px; border:0; display:block; background:#0d1117; border-radius:24px;"
+            title="One-Click ID Card Maker"></iframe>
+  </div>
+</div>
+
 <!-- MIDDLE ADSENSE UNIT -->
     <div class="adsense-container no-print">
       <span class="ad-label">Advertisement</span>
@@ -7984,7 +8032,7 @@ ILP_AUTH.submitRegistration = async function () {
     if (!cfg) return false;
     if (!requireAuth()) return true; // handled (blocked)
 
-    ['landingSection','smartIdSection','passportSection','bgaiSection','cropperSection','dynamicModuleSection']
+    ['landingSection','smartIdSection','passportSection','bgaiSection','cropperSection','bandhkamSection','oneClickCardSection','dynamicModuleSection']
       .forEach(function (id) {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
@@ -8033,7 +8081,7 @@ ILP_AUTH.submitRegistration = async function () {
   const FRAME_ID      = 'bandhkamFrame';
   const OTHER_SECTIONS = [
     'landingSection','smartIdSection','passportSection',
-    'bgaiSection','cropperSection','jointSection','dynamicModuleSection'
+    'bgaiSection','cropperSection','jointSection','oneClickCardSection','dynamicModuleSection'
   ];
 
   function hideOthers() {
@@ -8277,6 +8325,96 @@ ILP_AUTH.submitRegistration = async function () {
 })();
 </script>
 
+
+
+<!-- ============================================================
+     iLovePrint ADD-ON — One-Click ID Card Maker Suite
+     Debits 1 point on each Print / Combined PDF / Combined PNG
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  const OCC_PATH   = 'one-click-card.html';
+  const SECTION_ID = 'oneClickCardSection';
+  const FRAME_ID   = 'oneClickCardFrame';
+  const OTHER_SECTIONS = [
+    'landingSection','smartIdSection','passportSection',
+    'bgaiSection','cropperSection','jointSection','bandhkamSection','dynamicModuleSection'
+  ];
+
+  function hideOthers() {
+    OTHER_SECTIONS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+  }
+
+  function requireAuth() {
+    var acc     = JSON.parse(localStorage.getItem('iloveprint_account') || 'null');
+    var adminIn = sessionStorage.getItem('iloveprint_admin_session') === '1';
+    if (adminIn) return true;
+    if (!acc) { window.ILP_AUTH.showRegistration(); return false; }
+    if (acc.status !== 'approved') {
+      if (acc.status === 'pending_payment') window.ILP_AUTH.showPaymentModal();
+      else                                  window.ILP_AUTH.showPending();
+      return false;
+    }
+    if (acc.expiryDate && Date.now() > acc.expiryDate) {
+      window.ILP_AUTH.showExpired();
+      return false;
+    }
+    return true;
+  }
+
+  window.openOneClickCardModule = function () {
+    if (!requireAuth()) return;
+    // Check at least 1 point available (unlimited pass also OK)
+    if (window.ILP_WALLET && !window.ILP_WALLET.canUse(1)) return;
+
+    hideOthers();
+
+    var tg = document.getElementById('topGuideBar');
+    if (tg) tg.style.display = 'none';
+    var hb = document.getElementById('topHubReturnBtn');
+    if (hb) hb.style.display = 'inline-flex';
+
+    var iframe = document.getElementById(FRAME_ID);
+    if (iframe && !iframe.dataset.loaded) {
+      iframe.src = OCC_PATH;
+      iframe.dataset.loaded = '1';
+    }
+
+    var sec = document.getElementById(SECTION_ID);
+    if (sec) sec.style.display = 'block';
+    document.body.className = 'mode-oneclick';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Debit 1 point when child reports a print/export
+  window.addEventListener('message', function (ev) {
+    if (!ev.data || ev.data.type !== 'ilp-one-click-card-print') return;
+    if (window.ILP_WALLET) {
+      window.ILP_WALLET.debit('One-Click ID Card', 1);
+    }
+  });
+
+  // Integrate with switchSuiteSection
+  var _origSwitch = window.switchSuiteSection;
+  window.switchSuiteSection = function (mode) {
+    var sec = document.getElementById(SECTION_ID);
+    if (sec) sec.style.display = 'none';
+    if (mode === 'oneclick' || mode === 'one-click-card') {
+      window.openOneClickCardModule();
+      return;
+    }
+    return _origSwitch.apply(this, arguments);
+  };
+
+  console.log('[iLovePrint] One-Click ID Card Maker module ready.');
+})();
+</script>
+<!-- ============ END One-Click Card ADD-ON ============ -->
 
 </body>
 </html>
