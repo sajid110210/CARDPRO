@@ -5483,35 +5483,13 @@
   /* ---- Base64 decoder wrapper (obfuscation, not encryption) ---- */
   const _d = (b64) => { try { return atob(b64); } catch (e) { return ''; } };
 
-  /* ---- Encoded secrets (base64). Change values by re-encoding in base64. ---- */
-  const _USER_B64 = 'c2FqaWQ3MjU0';            /* sajid7254         */
-  const _PASS_B64 = 'SGVlbmFANzI1NA==';        /* Heena@7254        */
-  const _UPI_B64  = 'OTc2Nzc4NTM1M0BtYms=';    /* 9767785353@mbk    */
+  /* Admin username/password are NOT stored in HTML.
+     They live only in Google Sheet → Settings (adminUser / adminPass / adminKey).
+     Login goes through Apps Script action: admin_login */
+  const _UPI_B64  = 'OTc2Nzc4NTM1M0BtYms=';    /* default UPI only */
 
-  /* ---- SHA-256 hash helper (password is never compared as plaintext) ---- */
-  async function _hash(str) {
-    if (!window.crypto || !crypto.subtle) {
-      /* Fallback DJB2-ish hash if SubtleCrypto is unavailable */
-      let h = 5381;
-      for (let i = 0; i < str.length; i++) h = ((h << 5) + h) ^ str.charCodeAt(i);
-      return 'fb_' + (h >>> 0).toString(36);
-    }
-    const buf = new TextEncoder().encode(str);
-    const dig = await crypto.subtle.digest('SHA-256', buf);
-    return Array.from(new Uint8Array(dig))
-      .map(b => b.toString(16).padStart(2, '0')).join('');
-  }
-
-  /* Pre-compute the admin password hash once at startup */
-  let _passHash = null;
-  _hash(_d(_PASS_B64)).then(h => { _passHash = h; });
-
-  /* ---- Public façade ---- */
   window.ILP_SECRET = {
-    user:     () => _d(_USER_B64),
-    passHash: () => _passHash,
-    hash:     _hash,
-    upi:      () => _d(_UPI_B64)
+    upi: () => { try { return atob(_UPI_B64); } catch (e) { return ''; } }
   };
 
   /* ================================================================
@@ -5970,14 +5948,15 @@
   const DEFAULTS = {
     amount: 50,
     planDays: 30,
-    upiId: (window.ILP_SECRET && ILP_SECRET.upi) ? ILP_SECRET.upi() : '',
+    upiId: (window.ILP_SECRET && ILP_SECRET.upi) ? ILP_SECRET.upi() : '9767785353@mbk',
     payee: 'iLovePrint',
     qrUrl: '',
     sheetUrl: ''
   };
   /* Admin username pulled from obfuscated secret.
      Admin password is never stored in plaintext — only its SHA-256 hash. */
-  const ADMIN_USER = (window.ILP_SECRET && ILP_SECRET.user) ? ILP_SECRET.user() : '\x00';
+  /* Admin credentials are only in Google Sheet Settings — never in HTML */
+  const ADMIN_USER = '';
   const K = {
     ACC: 'iloveprint_account',
     USERS: 'iloveprint_users_db',
@@ -6048,20 +6027,30 @@
   }
 
   /* ---------- Plan helpers ---------- */
+  function safeTs(v) {
+    if (v == null || v === '' || v === 0 || v === '0') return null;
+    if (typeof v === 'number') return (v > 10000000000 ? v : (v > 0 ? v * 1000 : null));
+    var t = Date.parse(v);
+    if (!t || isNaN(t) || t < 946684800000) return null; // reject pre-2000 / epoch junk
+    return t;
+  }
+
   function getPlanInfo(acc) {
     if (!acc) return { rechargeDate: null, expiryDate: null, daysLeft: 0, expired: true, expiringSoon: false, planDays: 30, isPoints: false };
     const s = ILPSettings.get();
     const planDays = s.planDays || 30;
-    const rechargeDate = acc.rechargeDate || acc.approvedAt || null;
+    const rechargeDate = safeTs(acc.rechargeDate) || safeTs(acc.approvedAt) || null;
 
-    // POINTS plan never expires by calendar date — access is controlled by points_balance / ILP_WALLET
-    if (acc.plan_type === 'POINTS') {
+    // POINTS = no calendar validity (only points_balance matters)
+    const isPoints = String(acc.plan_type || '').toUpperCase() === 'POINTS' ||
+      (!acc.expiryDate && (Number(acc.points_balance) || 0) > 0 && String(acc.plan_type || '').toUpperCase() !== 'UNLIMITED');
+
+    if (isPoints) {
       return { rechargeDate, expiryDate: null, daysLeft: 0, expired: false, expiringSoon: false, planDays: 0, isPoints: true };
     }
 
-    // Unlimited / time-based: use explicit expiryDate only.
-    // Do NOT invent expiry from rechargeDate (that broke POINTS users and admin-approved accounts).
-    const expiryDate = acc.expiryDate || null;
+    // UNLIMITED only: use real expiryDate; never invent epoch dates
+    let expiryDate = safeTs(acc.expiryDate);
     const now = Date.now();
     let daysLeft = 0, expired = false, expiringSoon = false;
     if (expiryDate) {
@@ -6069,7 +6058,6 @@
       expired = now > expiryDate;
       expiringSoon = !expired && daysLeft <= 5;
     }
-    // approved + no expiryDate → still active (legacy admin approve / points without plan_type flag)
     return { rechargeDate, expiryDate, daysLeft, expired, expiringSoon, planDays, isPoints: false };
   }
 
@@ -6165,8 +6153,18 @@
   function show(id) { const e = gEl(id); if (e) e.style.display = 'flex'; }
   function hide(id) { const e = gEl(id); if (e) e.style.display = 'none'; }
   function hideAllAuthModals() { ['ilpPayModal','ilpPendingModal','ilpExpiredModal','ilpUserDash','ilpLoginModal','ilpRegModal'].forEach(hide); }
-  function fmtDate(ts) { if (!ts) return '-'; return new Date(ts).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }); }
-  function fmtDateTime(ts) { if (!ts) return '-'; return new Date(ts).toLocaleString('en-IN'); }
+  function fmtDate(ts) {
+    if (!ts) return '-';
+    var t = (typeof ts === 'number') ? ts : Date.parse(ts);
+    if (!t || isNaN(t) || t < 946684800000) return '-'; // ignore invalid / epoch
+    return new Date(t).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+  function fmtDateTime(ts) {
+    if (!ts) return '-';
+    var t = (typeof ts === 'number') ? ts : Date.parse(ts);
+    if (!t || isNaN(t) || t < 946684800000) return '-';
+    return new Date(t).toLocaleString('en-IN');
+  }
 
   /* ---------- Badge ---------- */
   function refreshBadge() {
@@ -6354,10 +6352,20 @@ password: acc.password || acc.mobile, status: acc.status, amount: acc.amount,
         try {
           const r = await fetch(url + (url.includes('?') ? '&' : '?') + 'action=get_user&mobile=' + encodeURIComponent(acc.mobile));
           const d = await r.json();
-          if (d && d.mobile) {
-            acc.status = d.status || acc.status;
-            if (d.rechargeDate) acc.rechargeDate = Date.parse(d.rechargeDate) || acc.rechargeDate;
-            if (d.expiryDate) acc.expiryDate = Date.parse(d.expiryDate) || acc.expiryDate;
+          const u = (d && d.user) ? d.user : d;
+          if (u && (u.mobile || d.ok)) {
+            acc.status = u.status || acc.status;
+            if (u.plan_type) acc.plan_type = u.plan_type;
+            if (u.points_balance != null) acc.points_balance = Number(u.points_balance) || 0;
+            var rd = safeTs(u.rechargeDate);
+            if (rd) acc.rechargeDate = rd;
+            // Only store expiry for UNLIMITED; clear for POINTS
+            if (String(acc.plan_type || '').toUpperCase() === 'POINTS') {
+              acc.expiryDate = null;
+            } else {
+              var ed = safeTs(u.expiryDate);
+              if (ed) acc.expiryDate = ed;
+            }
             LS.set(K.ACC, acc);
             Users.upsert(acc);
           }
@@ -6367,9 +6375,18 @@ password: acc.password || acc.mobile, status: acc.status, amount: acc.amount,
       refreshBadge();
       if (fresh && fresh.status === 'approved') {
         const plan = getPlanInfo(fresh);
+        if (plan.isPoints) {
+          hideAllAuthModals();
+          alert('🎉 Approved! Points plan active.\n\nPoints balance: ' + (Number(fresh.points_balance) || 0) + '\n(No expiry date — points never expire.)');
+          return;
+        }
         if (plan.expired) return this.showExpired();
         hideAllAuthModals();
-        alert('🎉 Approved! Plan active until ' + fmtDate(plan.expiryDate) + '.');
+        if (plan.expiryDate) {
+          alert('🎉 Approved! Unlimited plan active until ' + fmtDate(plan.expiryDate) + '.');
+        } else {
+          alert('🎉 Approved! Your plan is active.');
+        }
       } else if (fresh && (fresh.status === 'rejected' || fresh.status === 'suspended')) {
         alert('Status: ' + fresh.status + '. Contact admin.');
       } else {
@@ -6446,31 +6463,39 @@ password: acc.password || acc.mobile, status: acc.status, amount: acc.amount,
 
         closeAdminLogin() { hide('ilpAdminLoginModal'); },
 
-    /* Hash-verified admin login — pure client, no server round-trip */
+    /* Cloud-only admin login — credentials from Sheet Settings (adminUser/adminPass) */
     async adminLogin() {
       const u = gEl('ilpAdminUser').value.trim();
       const p = gEl('ilpAdminPass').value;
-
       if (!u || !p) return alert('Please enter both username and password.');
 
-      if (!window.ILP_SECRET || typeof ILP_SECRET.hash !== 'function') {
-        return alert('❌ Security module not loaded.');
+      const cloudUrl = (typeof GOOGLE_SHEET_API_URL !== 'undefined' && GOOGLE_SHEET_API_URL)
+        ? GOOGLE_SHEET_API_URL
+        : (window.ILP_SETTINGS && ILP_SETTINGS.sheetUrl ? ILP_SETTINGS.sheetUrl() : '');
+      if (!cloudUrl) {
+        return alert('Google Apps Script URL missing. Set it in Admin → Settings after first deploy.');
       }
-      let stored = ILP_SECRET.passHash();
-      if (!stored) { await new Promise(r => setTimeout(r, 300)); stored = ILP_SECRET.passHash(); }
-
-      const inputHash = await ILP_SECRET.hash(p);
-
-      if (u === ADMIN_USER && stored && inputHash === stored) {
-        sessionStorage.setItem(K.ADMIN, '1');
-        sessionStorage.setItem('iloveprint_admin_session', '1');
-        sessionStorage.setItem('iloveprint_admin_key', 'ILP-SECURE-ADMIN-2026');
-        hide('ilpAdminLoginModal');
-        ILP_ADMIN.open();
-        addLog('admin_login', 'Admin logged in');
-      } else {
-        await new Promise(r => setTimeout(r, 700));
-        alert('❌ Invalid credentials.');
+      try {
+        if (typeof busy === 'function') busy(true, 'Verifying admin...');
+        const res = await fetch(cloudUrl + (cloudUrl.includes('?') ? '&' : '?') + new URLSearchParams({
+          action: 'admin_login', user: u, pass: p
+        }));
+        const data = await res.json();
+        if (typeof busy === 'function') busy(false);
+        if (data && data.ok && data.adminKey) {
+          sessionStorage.setItem(K.ADMIN, '1');
+          sessionStorage.setItem('iloveprint_admin_session', '1');
+          sessionStorage.setItem('iloveprint_admin_key', data.adminKey);
+          hide('ilpAdminLoginModal');
+          ILP_ADMIN.open();
+          addLog('admin_login', 'Admin logged in (cloud)');
+        } else {
+          await new Promise(r => setTimeout(r, 500));
+          alert('❌ Invalid credentials.');
+        }
+      } catch (err) {
+        if (typeof busy === 'function') busy(false);
+        alert('Login failed: ' + (err.message || err));
       }
     },
 
@@ -7880,7 +7905,25 @@ ILP_AUTH.submitRegistration = async function () {
   }
 
   ILP_ADMIN.approve = function (mobile) {
-    return adminCall('admin_status', { mobile, status: 'approved' }, 'Approving…');
+    var planType = prompt(
+      'Approve ' + mobile + '\n\nEnter plan type:\n  UNLIMITED  — calendar days access\n  POINTS     — wallet points\n\nType UNLIMITED or POINTS:',
+      'UNLIMITED'
+    );
+    if (!planType) return;
+    planType = String(planType).trim().toUpperCase();
+    var params = { mobile: mobile, status: 'approved', planType: planType };
+    if (planType === 'POINTS') {
+      var pts = prompt('How many points to set/add?', '50');
+      if (pts === null) return;
+      params.points = parseInt(pts, 10) || 0;
+      params.addPoints = confirm('ADD these points to existing balance?\nOK = add\nCancel = replace balance') ? 'true' : 'false';
+    } else {
+      var days = prompt('Unlimited plan days:', String((cfg().planDays) || 30));
+      if (days === null) return;
+      params.days = parseInt(days, 10) || 30;
+      params.planType = 'UNLIMITED';
+    }
+    return adminCall('admin_status', params, 'Approving…');
   };
   ILP_ADMIN.reject = function (mobile) {
     return adminCall('admin_status', { mobile, status: 'rejected' }, 'Rejecting…');
@@ -8223,30 +8266,44 @@ ILP_AUTH.submitRegistration = async function () {
         if (typeof busy === 'function') busy(false);
 
         if (data.ok) {
-          // Update local account session
-          const acc = ILP_AUTH.getAccount();
+          const acc = ILP_AUTH.getAccount() || {};
           acc.status = 'approved';
-          if (data.planType === 'UNLIMITED') {
-            acc.expiryDate = Date.parse(data.expiryDate);
-            acc.rechargeDate = Date.now();
+          acc.rechargeDate = Date.now();
+          var planType = String(data.planType || (data.user && data.user.plan_type) || 'POINTS').toUpperCase();
+          if (planType === 'UNLIMITED') {
+            // Exactly 1 month from now (or server-provided valid date)
+            var ed = data.expiryDate ? Date.parse(data.expiryDate) : NaN;
+            if (!ed || isNaN(ed) || ed < Date.now()) {
+              ed = Date.now() + 30 * 86400000;
+            }
+            acc.expiryDate = ed;
             acc.plan_type = 'UNLIMITED';
-          } else if (data.planType === 'POINTS') {
-            acc.points_balance = Number(data.currentPoints) || 0;
-            acc.expiryDate = null;  // points plan has no expiry
-            acc.rechargeDate = Date.now();
+          } else {
+            // POINTS — never set validity
+            const pts = Number(
+              data.currentPoints != null ? data.currentPoints
+                : (data.user && data.user.points_balance != null ? data.user.points_balance : data.points)
+            ) || 0;
+            acc.points_balance = pts;
+            acc.expiryDate = null;
             acc.plan_type = 'POINTS';
           }
           localStorage.setItem('iloveprint_account', JSON.stringify(acc));
-          
           if (typeof refreshBadge === 'function') refreshBadge();
           ILP_AUTH.hideAll();
-          alert("🎉 Payment Successful! Account updated instantly.");
+          if (acc.plan_type === 'POINTS') {
+            alert('🎉 Payment Successful!\n\nPoints balance: ' + (acc.points_balance || 0) + '\n(No expiry — points do not expire.)');
+          } else {
+            alert('🎉 Payment Successful!\n\nUnlimited plan active until: ' +
+              new Date(acc.expiryDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }));
+          }
         } else {
-          alert("Verification pending or failed: " + (data.msg || "Order not paid yet."));
+          alert('Verification pending or failed: ' + (data.msg || 'Order not paid yet.') +
+            '\n\nIf money was deducted, wait 1–2 minutes and press Check Status, or contact admin.');
         }
       } catch (e) {
         if (typeof busy === 'function') busy(false);
-        alert("Payment completed. Click 'Check Status' in your dashboard if balance doesn't refresh automatically.");
+        alert('Payment may have completed. Click Check Status if points/plan do not refresh.\n\n' + (e.message || ''));
       }
     }
   };
