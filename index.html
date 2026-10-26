@@ -7447,17 +7447,23 @@ function json(obj) {
     return '';
   }
 
-  function adminKey() { 
-  return sessionStorage.getItem(AKEY_SES) || 'ILP-SECURE-ADMIN-2026'; 
-}
+  function adminKey() {
+    // Only the key returned by cloud admin_login — never a hardcoded fallback
+    return sessionStorage.getItem(AKEY_SES)
+      || sessionStorage.getItem('iloveprint_admin_key')
+      || '';
+  }
 
   /* ---------------- cloud transport (GET, CORS-safe) ---------------- */
-  async function cloud(params) {
+  let _cloudInflight = 0;
+  async function cloud(params, timeoutMs) {
     const base = cloudUrl();
     if (!base) { const e = new Error('NO_CLOUD_URL'); e.code = 'NO_CLOUD_URL'; throw e; }
     const qs = new URLSearchParams(params).toString();
     const ctl = new AbortController();
-    const timer = setTimeout(() => ctl.abort(), 25000);
+    const ms = timeoutMs || 60000; // 60s — Apps Script can be slow with many users
+    const timer = setTimeout(function () { try { ctl.abort(); } catch (_) {} }, ms);
+    _cloudInflight++;
     try {
       const res = await fetch(base + (base.indexOf('?') >= 0 ? '&' : '?') + qs, {
         method: 'GET', redirect: 'follow', cache: 'no-store', signal: ctl.signal
@@ -7465,10 +7471,22 @@ function json(obj) {
       const txt = await res.text();
       try { return JSON.parse(txt); }
       catch (e) {
-        const err = new Error('BAD_RESPONSE: ' + txt.slice(0, 160));
-        throw err;
+        throw new Error('BAD_RESPONSE: ' + String(txt).slice(0, 160));
       }
-    } finally { clearTimeout(timer); }
+    } catch (err) {
+      // Normalize abort / network errors into clear messages
+      var name = (err && err.name) || '';
+      var msg = (err && err.message) || String(err);
+      if (name === 'AbortError' || /aborted|abort/i.test(msg)) {
+        var e2 = new Error('Request timed out after ' + Math.round(ms / 1000) + 's. Check Apps Script deployment (Execute as: Me, Access: Anyone) and try again.');
+        e2.code = 'TIMEOUT';
+        throw e2;
+      }
+      throw err;
+    } finally {
+      clearTimeout(timer);
+      _cloudInflight = Math.max(0, _cloudInflight - 1);
+    }
   }
 
   /* ---------------- busy overlay ---------------- */
@@ -7844,43 +7862,59 @@ ILP_AUTH.submitRegistration = async function () {
   /* ================================================================
      ADMIN — refreshFromSheet (cloud authoritative)
      ================================================================ */
+  let _syncLock = false;
   ILP_ADMIN.refreshFromSheet = async function (silent) {
+    if (_syncLock) {
+      if (!silent) alert('Sync already running. Please wait…');
+      return;
+    }
     if (!cloudUrl()) {
       if (!silent) alert('No Google Apps Script URL configured. Add it in Settings.');
       return;
     }
     const key = adminKey();
     if (!key) {
-      if (!silent) alert('Enter the Admin Key in the Settings tab first (run setup() in Apps Script).');
+      if (!silent) alert('Admin key missing. Logout and login again as admin (credentials are in the Sheet Settings).');
       return;
     }
+    _syncLock = true;
     busy(true, 'Syncing users from cloud…');
     try {
-      const r = await cloud({ action: 'admin_list', adminKey: key });
-      busy(false);
-      if (!r.ok) {
-        if (!silent) alert(r.msg || 'Sync failed.');
+      // Longer timeout for full user list
+      const r = await cloud({ action: 'admin_list', adminKey: key }, 90000);
+      if (!r || !r.ok) {
+        if (!silent) alert((r && r.msg) || 'Sync failed. If it says invalid adminKey, logout and login again.');
         return;
       }
-      const list = (r.users || []).map(u => ({
-        mobile: u.mobile,
-        name: u.name,
-        shopName: u.shopName,
-        address: u.address,
-        password: u.password || u.mobile,
-        status: u.status || 'pending_payment',
-        amount: u.amount,
-        registeredAt: u.registeredAt ? Date.parse(u.registeredAt) : Date.now(),
-        rechargeDate: u.rechargeDate ? Date.parse(u.rechargeDate) : null,
-        expiryDate: u.expiryDate ? Date.parse(u.expiryDate) : null,
-        stats: u.stats || { idCards:0, passportPhotos:0, cropperPrints:0, bgRemovals:0, enhancements:0 }
-      }));
+      const list = (r.users || []).map(function (u) {
+        var planType = u.plan_type || null;
+        var exp = u.expiryDate ? Date.parse(u.expiryDate) : null;
+        if (exp && (isNaN(exp) || exp < 946684800000)) exp = null;
+        if (String(planType || '').toUpperCase() === 'POINTS') exp = null;
+        return {
+          mobile: u.mobile,
+          name: u.name,
+          shopName: u.shopName,
+          address: u.address,
+          password: u.password || u.mobile,
+          status: u.status || 'pending_payment',
+          amount: u.amount,
+          registeredAt: u.registeredAt ? Date.parse(u.registeredAt) : Date.now(),
+          rechargeDate: u.rechargeDate ? Date.parse(u.rechargeDate) : null,
+          expiryDate: exp,
+          plan_type: planType,
+          points_balance: Number(u.points_balance) || 0,
+          stats: u.stats || { idCards: 0, passportPhotos: 0, cropperPrints: 0, bgRemovals: 0, enhancements: 0 }
+        };
+      });
       localStorage.setItem(USERS_KEY, JSON.stringify(list));
       ILP_ADMIN.renderUsers();
       if (!silent) alert('✅ Synced ' + list.length + ' user(s) from the cloud.');
     } catch (e) {
+      if (!silent) alert('Sync failed: ' + (e.message || e));
+    } finally {
       busy(false);
-      if (!silent) alert('Sync failed: ' + e.message);
+      _syncLock = false;
     }
   };
 
