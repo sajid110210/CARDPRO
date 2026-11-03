@@ -568,8 +568,8 @@
       width: var(--pass-paper-width, 210mm);
       min-height: var(--pass-paper-min-height, 297mm);
       height: auto;
-      padding: var(--page-margin-top, 5mm) var(--page-margin-right, 5mm) var(--page-margin-bottom, 5mm) var(--page-margin-left, 5mm);
-      display: grid; align-content: start; justify-content: start;
+      padding: var(--pass-margin-top, var(--page-margin-top, 5mm)) var(--pass-margin-right, var(--page-margin-right, 5mm)) var(--pass-margin-bottom, var(--page-margin-bottom, 5mm)) var(--pass-margin-left, var(--page-margin-left, 5mm));
+      display: grid; align-content: start; justify-content: center;
       grid-template-columns: repeat(var(--pass-cols, auto-fill), var(--photo-width, 3.1cm));
       grid-gap: var(--pass-gap, 2mm); box-shadow: 0 16px 48px rgba(0,0,0,0.25);
       box-sizing: border-box;
@@ -946,11 +946,11 @@
         height: var(--pass-paper-min-height, 297mm) !important;
         min-height: 0 !important;
         max-height: var(--pass-paper-min-height, 297mm) !important;
-        padding: var(--page-margin-top, 5mm) var(--page-margin-right, 5mm) var(--page-margin-bottom, 5mm) var(--page-margin-left, 5mm) !important;
+        padding: var(--pass-margin-top, var(--page-margin-top, 5mm)) var(--pass-margin-right, var(--page-margin-right, 5mm)) var(--pass-margin-bottom, var(--page-margin-bottom, 5mm)) var(--pass-margin-left, var(--page-margin-left, 5mm)) !important;
         display: grid !important;
         grid-template-columns: repeat(var(--pass-cols, auto-fill), var(--photo-width, 3.1cm)) !important;
         grid-gap: var(--pass-gap, 2mm) !important;
-        justify-content: start !important;
+        justify-content: center !important;
         align-content: start !important;
         page-break-after: avoid !important;
         page-break-inside: avoid !important;
@@ -3606,7 +3606,23 @@
       const left = Math.max(0, parseFloat(passMarginLeftInput.value) || 0);
       const right = Math.max(0, parseFloat(passMarginRightInput.value) || 0);
 
-      passportA4Sheet.style.padding = `${top}mm ${right}mm ${bottom}mm ${left}mm`;
+      // Live preview padding
+      if (passportA4Sheet) {
+        passportA4Sheet.style.padding = `${top}mm ${right}mm ${bottom}mm ${left}mm`;
+      }
+
+      // Critical: print CSS uses these CSS variables with !important.
+      // Without setting them, margin inputs only affect the on-screen preview.
+      document.documentElement.style.setProperty('--page-margin-top', `${top}mm`);
+      document.documentElement.style.setProperty('--page-margin-bottom', `${bottom}mm`);
+      document.documentElement.style.setProperty('--page-margin-left', `${left}mm`);
+      document.documentElement.style.setProperty('--page-margin-right', `${right}mm`);
+      // Passport-specific aliases (used by dynamic print style)
+      document.documentElement.style.setProperty('--pass-margin-top', `${top}mm`);
+      document.documentElement.style.setProperty('--pass-margin-bottom', `${bottom}mm`);
+      document.documentElement.style.setProperty('--pass-margin-left', `${left}mm`);
+      document.documentElement.style.setProperty('--pass-margin-right', `${right}mm`);
+
       localStorage.setItem('pass_margin_top', top);
       localStorage.setItem('pass_margin_bottom', bottom);
       localStorage.setItem('pass_margin_left', left);
@@ -3911,6 +3927,15 @@
       renderAllPassportMatrixCanvases();
       document.body.className = 'mode-passport';
 
+      // Sync margin inputs → CSS variables BEFORE building print styles
+      updatePassportPageMargins();
+
+      const top = Math.max(0, parseFloat(passMarginTopInput.value) || 0);
+      const bottom = Math.max(0, parseFloat(passMarginBottomInput.value) || 0);
+      const left = Math.max(0, parseFloat(passMarginLeftInput.value) || 0);
+      const right = Math.max(0, parseFloat(passMarginRightInput.value) || 0);
+      const padRule = `padding: ${top}mm ${right}mm ${bottom}mm ${left}mm !important;`;
+
       let pageStyle = document.getElementById('ilpDynamicPageStyle');
       if (!pageStyle) {
         pageStyle = document.createElement('style');
@@ -3930,9 +3955,12 @@
             width: 152.4mm !important; height: 101.6mm !important;
             min-height: 0 !important; max-height: 101.6mm !important;
             overflow: hidden !important;
+            ${padRule}
+            justify-content: center !important;
+            align-content: start !important;
           }
         `;
-        passportA4Sheet.style.cssText = 'width:152.4mm;height:101.6mm;min-height:0;max-height:101.6mm;overflow:hidden;';
+        passportA4Sheet.style.cssText = `width:152.4mm;height:101.6mm;min-height:0;max-height:101.6mm;overflow:hidden;padding:${top}mm ${right}mm ${bottom}mm ${left}mm;`;
       } else {
         document.documentElement.style.setProperty('--pass-paper-width', '210mm');
         document.documentElement.style.setProperty('--pass-paper-min-height', '297mm');
@@ -3947,9 +3975,12 @@
             overflow: hidden !important;
             grid-template-columns: repeat(6, var(--photo-width, 3.1cm)) !important;
             grid-gap: 1.5mm !important;
+            ${padRule}
+            justify-content: center !important;
+            align-content: start !important;
           }
         `;
-        passportA4Sheet.style.cssText = '';
+        passportA4Sheet.style.cssText = `padding:${top}mm ${right}mm ${bottom}mm ${left}mm;`;
       }
 
       // Force one reflow then print
@@ -3959,6 +3990,7 @@
         setTimeout(() => {
           pageStyle.textContent = '@page { size: 210mm 297mm; margin: 0 !important; }';
           passportA4Sheet.style.cssText = '';
+          updatePassportPageMargins(); // restore live preview padding + CSS vars
           document.documentElement.style.setProperty('--pass-paper-width', currentPassportPreset === '4x6_8photos' ? '152.4mm' : '210mm');
           document.documentElement.style.setProperty('--pass-paper-min-height', currentPassportPreset === '4x6_8photos' ? '101.6mm' : '297mm');
         }, 800);
