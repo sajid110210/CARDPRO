@@ -3720,7 +3720,7 @@
           panY: 0,
           brightness: 100,
           contrast: 100,
-          sharpen: 70,
+          sharpen: 0,
           fitMode: 'contain',
           imgObj: null
         });
@@ -3792,7 +3792,7 @@
             <div class="tool-row"><span>Pan X:</span><input type="range" min="-80" max="80" value="${person.panX || 0}" oninput="updatePassportProperty(${person.id}, 'panX', this.value)"></div>
             <div class="tool-row"><span>Bright:</span><input type="range" min="50" max="170" value="${person.brightness}" oninput="updatePassportProperty(${person.id}, 'brightness', this.value)"></div>
             <div class="tool-row"><span>Contrast:</span><input type="range" min="50" max="180" value="${person.contrast || 100}" oninput="updatePassportProperty(${person.id}, 'contrast', this.value)"></div>
-            <div class="tool-row"><span>AI Sharp:</span><input type="range" min="0" max="100" value="${person.sharpen || 70}" oninput="updatePassportProperty(${person.id}, 'sharpen', this.value)"></div>
+            <div class="tool-row"><span>AI Sharp:</span><input type="range" min="0" max="100" value="${person.sharpen || 0}" oninput="updatePassportProperty(${person.id}, 'sharpen', this.value)"></div>
           </div>`;
         passportCardsContainer.insertBefore(card, passportCardsContainer.lastElementChild);
         applyPassportStylesToImg(card.querySelector('img'), person);
@@ -3863,7 +3863,7 @@
           c.strokeRect(bW / 2, bW / 2, targetW - bW, targetH - bW);
         }
 
-        const sharp = (p.sharpen || 70) / 100;
+        const sharp = (p.sharpen || 0) / 100;
         if (sharp > 0.05) applySmartAIEnhance(c, targetW, targetH, sharp);
 
         canvases.forEach(canv => {
